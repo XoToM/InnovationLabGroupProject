@@ -1,3 +1,0 @@
-Temporary File please ignore
-
-Github doesn't like empty folders, so this file is here so that everyone can see the folder.
