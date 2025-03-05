@@ -20,7 +20,9 @@
    ```
 
 4. Go to the Visual Studio press CTRL+Shift+P (Or ⌘+Shift+P on Mac).
+
 Choose "TypeScript: Select a TypeScript Version...".
+
 Choose "Use workspace Version" .
 
 In the output, you'll find options to open the app in a
