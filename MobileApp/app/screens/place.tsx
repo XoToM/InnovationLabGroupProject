@@ -26,7 +26,7 @@ export default function App() {
       <Text style={styles.pageTitle}>Bath Restaurant</Text>
 
       {/* Large Image */}
-      <Image source={require("../../assets/images/icon.png")} style={styles.largeImage} />
+      <Image source={require("../../assets/images/better-icon.png")} style={[styles.largeImage, {resizeMode:"stretch"}]} />
 
       {/* Buttons Section */}
       <View style={styles.buttonContainer}>
