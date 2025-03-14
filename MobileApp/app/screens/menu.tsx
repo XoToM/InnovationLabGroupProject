@@ -10,6 +10,9 @@ export default function ScreensMenu() {
 		<Link href="/screens/login">
 		  <Button title="Login" />
 		</Link>
+		<Link href="/screens/filter">
+		  <Button title="filter" />
+		</Link>
 	  </View>
 	);
   }
