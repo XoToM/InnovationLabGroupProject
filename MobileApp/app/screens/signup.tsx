@@ -6,21 +6,27 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 // Define navigation types
 type RootStackParamList = {
   Home: undefined;
-  Login: undefined;
+  Signup: undefined;
 };
 
-type Props = NativeStackScreenProps<RootStackParamList, "Login">;
+type Props = NativeStackScreenProps<RootStackParamList, "Signup">;
 
-const Login: React.FC<Props> = ({ navigation }) => {
+const Signup: React.FC<Props> = ({ navigation }) => {
+  const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
 
-  const handleLogin = () => {
-    if (!email || !password) {
-      alert("Please enter email and password.");
+  const handleSignup = () => {
+    if (!name || !email || !password || !confirmPassword) {
+      alert("Please fill in all fields.");
       return;
     }
-    console.log("Logging in with:", email, password);
+    if (password !== confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+    console.log("Signing up with:", name, email, password);
   };
 
   return (
@@ -30,7 +36,7 @@ const Login: React.FC<Props> = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.navigate("Home")}>
           <Ionicons name="home" size={30} color="black" />
         </TouchableOpacity>
-        <Text style={styles.headerText}>Log In</Text>
+        <Text style={styles.headerText}>Sign-Up</Text>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="close" size={30} color="black" />
         </TouchableOpacity>
@@ -38,33 +44,18 @@ const Login: React.FC<Props> = ({ navigation }) => {
 
       {/* Title */}
       <Text style={styles.welcomeText}>
-        Welcome Back to <Text style={styles.brandText}>EquiMap</Text>
+        Create Your <Text style={styles.brandText}>EquiMap</Text> Account
       </Text>
 
       {/* Input Fields */}
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        keyboardType="email-address"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
+      <TextInput style={styles.input} placeholder="Name" value={name} onChangeText={setName} />
+      <TextInput style={styles.input} placeholder="Email" keyboardType="email-address" value={email} onChangeText={setEmail} />
+      <TextInput style={styles.input} placeholder="Password" secureTextEntry value={password} onChangeText={setPassword} />
+      <TextInput style={styles.input} placeholder="Confirm Password" secureTextEntry value={confirmPassword} onChangeText={setConfirmPassword} />
 
-      {/* Login Button */}
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Log in</Text>
-      </TouchableOpacity>
-
-      {/* Forgot Password */}
-      <TouchableOpacity onPress={() => alert("Reset password functionality")}>
-        <Text style={styles.forgotPassword}>Forgot your password?</Text>
+      {/* Signup Button */}
+      <TouchableOpacity style={styles.button} onPress={handleSignup}>
+        <Text style={styles.buttonText}>Sign up</Text>
       </TouchableOpacity>
     </View>
   );
@@ -80,7 +71,6 @@ const styles = StyleSheet.create({
   input: { width: "100%", padding: 10, borderWidth: 1, borderRadius: 5, marginBottom: 10, backgroundColor: "#f0f0f0" },
   button: { backgroundColor: "#005f73", padding: 10, borderRadius: 5, alignItems: "center", width: "100%" },
   buttonText: { color: "white", fontWeight: "bold" },
-  forgotPassword: { marginTop: 10, color: "blue" },
 });
 
-export default Login;
+export default Signup;
