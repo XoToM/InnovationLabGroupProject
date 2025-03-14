@@ -7,7 +7,7 @@ export default function App() {
   const [activeInfo, setActiveInfo] = useState(null);
   const [menuVisible, setMenuVisible] = useState(false);
 
-  const toggleInfo = (type) => {
+  const toggleInfo = (type:any) => {
     setActiveInfo(activeInfo === type ? null : type);
   };
 
@@ -15,7 +15,7 @@ export default function App() {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Image source={require('./assets/clash.png')} style={styles.logo} />
+        <Image source={require('../../assets/images/icon.png')} style={styles.logo} />
         <Text style={styles.headerText}>EquiMap</Text>
         <TouchableOpacity style={styles.menuButton} onPress={() => setMenuVisible(true)}>
           <Text style={styles.menuIcon}>☰</Text>
@@ -26,7 +26,7 @@ export default function App() {
       <Text style={styles.pageTitle}>Bath Restaurant</Text>
 
       {/* Large Image */}
-      <Image source={require('./assets/snack-icon.png')} style={styles.largeImage} />
+      <Image source={require("../../assets/images/icon.png")} style={styles.largeImage} />
 
       {/* Buttons Section */}
       <View style={styles.buttonContainer}>
