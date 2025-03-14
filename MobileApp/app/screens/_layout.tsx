@@ -27,11 +27,11 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
-  console.log("wtf");
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
+        <Stack.Screen name="map"/>
         <Stack.Screen name="menu"/>
         <Stack.Screen name="login"/>
       </Stack>
