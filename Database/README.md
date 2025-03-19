@@ -15,7 +15,7 @@
    1. Connection name: EquiMap
    2. Hostname: [given hostname]
    3. Login: admin
-   4. Password: given password (You will also be prompted to enter it when connecting)
+   4. Password: given password (You will also be prompted to enter it when connecting or press Store in Vault to save it for later connections)
    5. Port: 3306
    6. Default Schema: EquiMap
 3. Check connection by executing this query: select \* from Place
