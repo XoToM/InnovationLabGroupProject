@@ -1,12 +1,20 @@
-import { Link } from 'expo-router';
-import { View, Text, Button } from 'react-native';
-
+import { useEffect } from "react";
+import { useRouter, useRootNavigationState } from "expo-router";
+import { View, Text } from "react-native";
 
 export default function ScreensInitial() {
-	return (
-	  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-		<Text>Initial screen</Text>
-		<Link href="/screens/menu">Click here to go to menu. TODO: Make this redirect to main map/welcome/login screen instead</Link>
-	  </View>
-	);
-  }
+  const router = useRouter();
+  const navigationState = useRootNavigationState();
+
+  useEffect(() => {
+    if (navigationState?.key) {
+      router.replace("/screens/login");
+    }
+  }, [navigationState?.key]);
+
+  return (
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Text></Text>
+    </View>
+  );
+}
