@@ -1,0 +1,8 @@
+{
+    "db_config": {
+        "host": "127.0.0.1",
+        "user": "scraper",
+        "password": "scraper",
+        "database": "EquiMap"
+    }
+}

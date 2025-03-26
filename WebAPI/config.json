@@ -1,0 +1,8 @@
+{
+    "db_config": {
+        "host": "katestudent.mysql.pythonanywhere-services.com",
+        "user": "katestudent",
+        "password": "KateAdmin",
+        "database": "katestudent$default"
+    }
+}

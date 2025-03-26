@@ -2,17 +2,15 @@ from flask import Flask
 from flask_restful import Api, Resource, reqparse, abort
 import mysql.connector
 from mysql.connector import Error
+import json
 
 app = Flask(__name__)
 api = Api(app)
 
-# Database configuration
-db_config ={
-    'host': '127.0.0.1',
-    'user': 'scraper',
-    'password': 'scraper',
-    'database': 'EquiMap'
-}
+# Read the config from JSON file
+with open('config.json', 'r') as config_file:
+    config = json.load(config_file)
+    db_config = config['db_config']
 
 # Function to create database connection
 def get_db_connection():
