@@ -23,7 +23,10 @@ export default function ScreensMenu() {
 				<Button title="Settings" />
 			</Link>
 			<Link href="/screens/filter">
-				<Button title="filter" />
+				<Button title="Filter" />
+			</Link>
+			<Link href="/screens/places">
+				<Button title="Places" />
 			</Link>
 		</View>
 	);
