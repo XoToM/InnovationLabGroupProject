@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { 
   Text, View, StyleSheet, Image, TouchableOpacity, Modal 
 } from 'react-native';
+import { useLocalSearchParams } from 'expo-router';
 
 export default function App() {
   const [activeInfo, setActiveInfo] = useState(null);
   const [menuVisible, setMenuVisible] = useState(false);
+  const {name, address, latitude, longitude} = useLocalSearchParams(); //add additional parametrs
 
   const toggleInfo = (type:any) => {
     setActiveInfo(activeInfo === type ? null : type);
@@ -23,7 +25,7 @@ export default function App() {
       </View>
 
       {/* Page Title */}
-      <Text style={styles.pageTitle}>Bath Restaurant</Text>
+      <Text style={styles.pageTitle}>{name}</Text>
 
       {/* Large Image */}
       <Image source={require("../../assets/images/better-icon.png")} style={[styles.largeImage, {resizeMode:"stretch"}]} />

@@ -37,6 +37,22 @@ place_parser.add_argument('contactNumber', type=str, required=False)
 place_parser.add_argument('latitude', type=float, required=True, help='Latitude cannot be blank')
 place_parser.add_argument('longitude', type=float, required=True, help='Longitude cannot be blank')
 
+# Request parser for PATCH requests (all fields are optional for this one)
+patch_parser = reqparse.RequestParser()
+patch_parser.add_argument('name', type=str, required=False)
+patch_parser.add_argument('address', type=str, required=False)
+patch_parser.add_argument('imageLink', type=str, required=False)
+patch_parser.add_argument('wheelchairAccess', type=int, required=False)
+patch_parser.add_argument('wheelchairAccessDescription', type=str, required=False)
+patch_parser.add_argument('inductionLoop', type=int, required=False)
+patch_parser.add_argument('inductionLoopDescription', type=str, required=False)
+patch_parser.add_argument('description', type=str, required=False)
+patch_parser.add_argument('customerRating', type=int, required=False)
+patch_parser.add_argument('priceRange', type=int, required=False)
+patch_parser.add_argument('contactNumber', type=str, required=False)
+patch_parser.add_argument('latitude', type=float, required=False)
+patch_parser.add_argument('longitude', type=float, required=False)
+
 # Place Resource
 class PlaceResource(Resource):
     def get(self, idPlace=None):
@@ -104,6 +120,37 @@ class PlaceResource(Resource):
             cursor.execute("DELETE FROM Place WHERE idPlace = %s", (idPlace,))
             connection.commit()
             return {'message': f'Place {idPlace} deleted'}, 200
+        except Error as e:
+            abort(500, message=f"Database error: {str(e)}")
+        finally:
+            cursor.close()
+            connection.close()
+
+    def patch(self, idPlace):
+        args = patch_parser.parse_args()
+        connection = get_db_connection()
+        if not connection:
+            abort(500, message="Database connection failed")
+
+        try:
+            #Remove None values from args since we only want to update provided fields
+            update_fields = {key: value for key, value in args.items() if value is not None}
+            if not update_fields:
+                abort(400, message="No valid fields provided for update")
+
+            cursor = connection.cursor()
+            cursor.execute("SELECT * FROM Place WHERE idPlace = %s", (idPlace,)) #Check if place exists
+            if not cursor.fetchone():
+                abort(404, message=f"Place with id {idPlace} not found")
+            
+            set_clause = ", ".join([f"{field} = %s" for field in update_fields.keys()])
+            values = tuple(update_fields.values())
+            query = f"UPDATE Place SET {set_clause} WHERE idPlace = %s"
+            # Add idPlace to the values tuple
+            cursor.execute(query, values + (idPlace,))
+            connection.commit()
+            return {"message": f"Place {idPlace} updated successfully"}, 200
+
         except Error as e:
             abort(500, message=f"Database error: {str(e)}")
         finally:
