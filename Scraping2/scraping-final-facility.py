@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import json
 
 def scrape_facilities(urls):
     # Define the specific facilities we want
@@ -14,6 +15,8 @@ def scrape_facilities(urls):
         "Non smoking areas",
         "Parking Off Site"
     ]
+
+    
     
     # Initialize results dictionary for each URL
     results = {url: {facility: "N/A" for facility in desired_facilities} for url in urls}
@@ -78,10 +81,22 @@ def main():
     print(">>> scrape_facilities(urls)")
     facilities_data = scrape_facilities(urls)
     
-    for url, facilities in facilities_data.items():
-        print(f"\nFacilities for {url}:")
-        for facility, status in facilities.items():
-            print(f"- {facility}: {status}")
+   # for url, facilities in facilities_data.items():
+   #     print(f"\nFacilities for {url}:")
+   #     for facility, status in facilities.items():
+   #         print(f"- {facility}: {status}")
 
+
+# Convert dictionary to JSON format with indentation
+    json_output = json.dumps(facilities_data, indent=4)
+
+    # Print or save to a file
+    print(json_output)
+
+# Optionally, save to a file
+    with open("facilities_data.json", "w") as json_file:
+        json_file.write(json_output)
+ 
+        
 if __name__ == "__main__":
     main()
