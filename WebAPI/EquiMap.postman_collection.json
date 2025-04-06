@@ -1,0 +1,102 @@
+{
+	"info": {
+		"_postman_id": "5d2dd665-1f06-40f1-b970-2c250c3ca93a",
+		"name": "EquiMap",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43361392",
+		"_collection_link": "https://universal-sunset-787573.postman.co/workspace/c8ad3a0d-9bdd-421c-8ca9-9c8ac5633f2b/collection/43361392-5d2dd665-1f06-40f1-b970-2c250c3ca93a?action=share&source=collection_link&creator=43361392"
+	},
+	"item": [
+		{
+			"name": "getPlaces",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}:{{port}}/places",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"places"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getPlaceWithId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}:{{port}}/places/3",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"places",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "postPlace",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Poundland\",\r\n    \"address\": \"Day 5\",\r\n    \"latitude\": 52.7,\r\n    \"longitude\": 47.2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}:{{port}}/places",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"places"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "postPlaceFull",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Poundland2\",\r\n    \"address\": \"Day 5\",\r\n    \"imageLink\": \"\",\r\n    \"wheelchairAccess\": 0,\r\n    \"wheelchairAccessDescription\": \"\",\r\n    \"inductionLoop\": 0,\r\n    \"inductionLoopDescription\": \"\",\r\n    \"description\": \"\",\r\n    \"customerRating\": 2,\r\n    \"priceRange\": 3,\r\n    \"contactNumber\": \"\",\r\n    \"latitude\": 52.7,\r\n    \"longitude\": 47.2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}:{{port}}/places",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"places"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
