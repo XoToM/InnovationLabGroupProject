@@ -7,7 +7,7 @@ import { useLocalSearchParams } from 'expo-router';
 export default function App() {
   const [activeInfo, setActiveInfo] = useState(null);
   const [menuVisible, setMenuVisible] = useState(false);
-  const {name, address, latitude, longitude} = useLocalSearchParams(); //add additional parametrs
+  const {name, formattedAddress, latitude, longitude} = useLocalSearchParams(); //add additional parametrs
 
   const toggleInfo = (type:any) => {
     setActiveInfo(activeInfo === type ? null : type);

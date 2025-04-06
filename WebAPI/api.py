@@ -1,14 +1,20 @@
 from flask import Flask
 from flask_restful import Api, Resource, reqparse, abort
+from flask_cors import CORS, cross_origin
 import mysql.connector
 from mysql.connector import Error
 import json
+import os
 
 app = Flask(__name__)
+cors = CORS(app)
 api = Api(app)
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CONFIG_PATH = os.path.join(BASE_DIR, 'config.json')
+
 # Read the config from JSON file
-with open('config.json', 'r') as config_file:
+with open(CONFIG_PATH, 'r') as config_file:
     config = json.load(config_file)
     db_config = config['db_config']
 
@@ -21,58 +27,99 @@ def get_db_connection():
         print(f"Error connecting to MySQL: {e}")
         return None
 
-# Request parser for POST requests
+# Request parser for POST requests (required fields for creating a new place)
 place_parser = reqparse.RequestParser()
 place_parser.add_argument('name', type=str, required=True, help='Name cannot be blank')
-place_parser.add_argument('address', type=str, required=True, help='Address cannot be blank')
-place_parser.add_argument('imageLink', type=str, required=False)
-place_parser.add_argument('wheelchairAccess', type=int, required=False)
+place_parser.add_argument('formattedAddress', type=str, required=True, help='Formatted address cannot be blank')
+place_parser.add_argument('photo', type=str, required=False)
+place_parser.add_argument('wheelchairAccessibleParking', type=int, required=False)
+place_parser.add_argument('wheelchairAccessibleEntrance', type=int, required=False)
+place_parser.add_argument('wheelchairAccessibleRestroom', type=int, required=False)
 place_parser.add_argument('wheelchairAccessDescription', type=str, required=False)
 place_parser.add_argument('inductionLoop', type=int, required=False)
 place_parser.add_argument('inductionLoopDescription', type=str, required=False)
 place_parser.add_argument('description', type=str, required=False)
-place_parser.add_argument('customerRating', type=int, required=False)
-place_parser.add_argument('priceRange', type=int, required=False)
-place_parser.add_argument('contactNumber', type=str, required=False)
+place_parser.add_argument('rating', type=int, required=False)
+place_parser.add_argument('priceLevel', type=int, required=False)
+place_parser.add_argument('nationalPhoneNumber', type=str, required=False)
 place_parser.add_argument('latitude', type=float, required=True, help='Latitude cannot be blank')
 place_parser.add_argument('longitude', type=float, required=True, help='Longitude cannot be blank')
+place_parser.add_argument('regularOpeningHours', type=str, required=False)
+place_parser.add_argument('delivery', type=int, required=False)
+place_parser.add_argument('takeout', type=int, required=False)
+place_parser.add_argument('dineIn', type=int, required=False)
+place_parser.add_argument('outdoorSeating', type=int, required=False)
+place_parser.add_argument('liveMusic', type=int, required=False)
+place_parser.add_argument('allowsDogs', type=int, required=False)
+place_parser.add_argument('goodForChildren', type=int, required=False)
+place_parser.add_argument('goodForGroups', type=int, required=False)
+place_parser.add_argument('goodForWatchingSports', type=int, required=False)
+place_parser.add_argument('restroom', type=int, required=False)
+place_parser.add_argument('reservable', type=int, required=False)
+place_parser.add_argument('curbsidePickup', type=int, required=False)
+place_parser.add_argument('menuForChildren', type=int, required=False)
+place_parser.add_argument('acceptsCreditCards', type=int, required=False)
+place_parser.add_argument('acceptsDebitCards', type=int, required=False)
+place_parser.add_argument('acceptsCashOnly', type=int, required=False)
+place_parser.add_argument('acceptsNfc', type=int, required=False)
 
-# Request parser for PATCH requests (all fields are optional for this one)
+# Request parser for PATCH requests (all fields are optional for updates)
 patch_parser = reqparse.RequestParser()
 patch_parser.add_argument('name', type=str, required=False)
-patch_parser.add_argument('address', type=str, required=False)
-patch_parser.add_argument('imageLink', type=str, required=False)
-patch_parser.add_argument('wheelchairAccess', type=int, required=False)
+patch_parser.add_argument('formattedAddress', type=str, required=False)
+patch_parser.add_argument('photo', type=str, required=False)
+patch_parser.add_argument('wheelchairAccessibleParking', type=int, required=False)
+patch_parser.add_argument('wheelchairAccessibleEntrance', type=int, required=False)
+patch_parser.add_argument('wheelchairAccessibleRestroom', type=int, required=False)
 patch_parser.add_argument('wheelchairAccessDescription', type=str, required=False)
 patch_parser.add_argument('inductionLoop', type=int, required=False)
 patch_parser.add_argument('inductionLoopDescription', type=str, required=False)
 patch_parser.add_argument('description', type=str, required=False)
-patch_parser.add_argument('customerRating', type=int, required=False)
-patch_parser.add_argument('priceRange', type=int, required=False)
-patch_parser.add_argument('contactNumber', type=str, required=False)
+patch_parser.add_argument('rating', type=int, required=False)
+patch_parser.add_argument('priceLevel', type=int, required=False)
+patch_parser.add_argument('nationalPhoneNumber', type=str, required=False)
 patch_parser.add_argument('latitude', type=float, required=False)
 patch_parser.add_argument('longitude', type=float, required=False)
+patch_parser.add_argument('regularOpeningHours', type=str, required=False)
+patch_parser.add_argument('delivery', type=int, required=False)
+patch_parser.add_argument('takeout', type=int, required=False)
+patch_parser.add_argument('dineIn', type=int, required=False)
+patch_parser.add_argument('outdoorSeating', type=int, required=False)
+patch_parser.add_argument('liveMusic', type=int, required=False)
+patch_parser.add_argument('allowsDogs', type=int, required=False)
+patch_parser.add_argument('goodForChildren', type=int, required=False)
+patch_parser.add_argument('goodForGroups', type=int, required=False)
+patch_parser.add_argument('goodForWatchingSports', type=int, required=False)
+patch_parser.add_argument('restroom', type=int, required=False)
+patch_parser.add_argument('reservable', type=int, required=False)
+patch_parser.add_argument('curbsidePickup', type=int, required=False)
+patch_parser.add_argument('menuForChildren', type=int, required=False)
+patch_parser.add_argument('acceptsCreditCards', type=int, required=False)
+patch_parser.add_argument('acceptsDebitCards', type=int, required=False)
+patch_parser.add_argument('acceptsCashOnly', type=int, required=False)
+patch_parser.add_argument('acceptsNfc', type=int, required=False)
 
 # Place Resource
 class PlaceResource(Resource):
+    @cross_origin()
     def get(self, idPlace=None):
         connection = get_db_connection()
         if not connection:
             abort(500, message="Database connection failed")
-        
+
         try:
             cursor = connection.cursor(dictionary=True)
             if idPlace is None:
                 cursor.execute("SELECT * FROM Place")
                 places = cursor.fetchall()
-                return {"places":places}, 200
+                return {"places": places}, 200
             else:
-                cursor.execute("SELECT * FROM Place WHERE idPlace = %s", (idPlace,)) #check cyber security
+                cursor.execute("SELECT * FROM Place WHERE idPlace = %s", (idPlace,))
                 place = cursor.fetchone()
-            
+
                 if not place:
                     abort(404, message=f"Place with id {idPlace} not found")
-                
+
                 return place, 200
         except Error as e:
             abort(500, message=f"Database error: {str(e)}")
@@ -85,16 +132,33 @@ class PlaceResource(Resource):
         connection = get_db_connection()
         if not connection:
             abort(500, message="Database connection failed")
-        
+
         try:
             cursor = connection.cursor()
             cursor.execute(
-                "INSERT INTO Place (name, address, imageLink, wheelchairAccess, wheelchairAccessDescription, "
-                + "inductionLoop, inductionLoopDescription, description, customerRating, priceRange, "
-                + "contactNumber, latitude, longitude) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-                (args['name'], args['address'], args['imageLink'], args['wheelchairAccess'], args['wheelchairAccessDescription'], 
-                 args['inductionLoop'], args['inductionLoopDescription'], args['description'], args['customerRating'], args['priceRange'], 
-                 args['contactNumber'], args['latitude'], args['longitude'],)
+                """
+                INSERT INTO Place (
+                    name, formattedAddress, photo, wheelchairAccessibleParking, wheelchairAccessibleEntrance,
+                    wheelchairAccessibleRestroom, wheelchairAccessDescription, inductionLoop, inductionLoopDescription,
+                    description, rating, priceLevel, nationalPhoneNumber, latitude, longitude, regularOpeningHours,
+                    delivery, takeout, dineIn, outdoorSeating, liveMusic, allowsDogs, goodForChildren, goodForGroups,
+                    goodForWatchingSports, restroom, reservable, curbsidePickup, menuForChildren, acceptsCreditCards,
+                    acceptsDebitCards, acceptsCashOnly, acceptsNfc
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                """,
+                (
+                    args['name'], args['formattedAddress'], args['photo'],
+                    args['wheelchairAccessibleParking'], args['wheelchairAccessibleEntrance'],
+                    args['wheelchairAccessibleRestroom'], args['wheelchairAccessDescription'],
+                    args['inductionLoop'], args['inductionLoopDescription'], args['description'],
+                    args['rating'], args['priceLevel'], args['nationalPhoneNumber'],
+                    args['latitude'], args['longitude'], args['regularOpeningHours'],
+                    args['delivery'], args['takeout'], args['dineIn'], args['outdoorSeating'],
+                    args['liveMusic'], args['allowsDogs'], args['goodForChildren'], args['goodForGroups'],
+                    args['goodForWatchingSports'], args['restroom'], args['reservable'], args['curbsidePickup'],
+                    args['menuForChildren'], args['acceptsCreditCards'], args['acceptsDebitCards'],
+                    args['acceptsCashOnly'], args['acceptsNfc']
+                )
             )
 
             connection.commit()
@@ -106,17 +170,18 @@ class PlaceResource(Resource):
             cursor.close()
             connection.close()
 
+    
     def delete(self, idPlace):
         connection = get_db_connection()
         if not connection:
             abort(500, message="Database connection failed")
-        
+
         try:
             cursor = connection.cursor()
             cursor.execute("SELECT * FROM Place WHERE idPlace = %s", (idPlace,))
             if not cursor.fetchone():
                 abort(404, message=f"Place with id {idPlace} not found")
-            
+
             cursor.execute("DELETE FROM Place WHERE idPlace = %s", (idPlace,))
             connection.commit()
             return {'message': f'Place {idPlace} deleted'}, 200
@@ -133,20 +198,19 @@ class PlaceResource(Resource):
             abort(500, message="Database connection failed")
 
         try:
-            #Remove None values from args since we only want to update provided fields
+            # Remove None values from args since we only want to update provided fields
             update_fields = {key: value for key, value in args.items() if value is not None}
             if not update_fields:
                 abort(400, message="No valid fields provided for update")
 
             cursor = connection.cursor()
-            cursor.execute("SELECT * FROM Place WHERE idPlace = %s", (idPlace,)) #Check if place exists
+            cursor.execute("SELECT * FROM Place WHERE idPlace = %s", (idPlace,))
             if not cursor.fetchone():
                 abort(404, message=f"Place with id {idPlace} not found")
-            
+
             set_clause = ", ".join([f"{field} = %s" for field in update_fields.keys()])
             values = tuple(update_fields.values())
             query = f"UPDATE Place SET {set_clause} WHERE idPlace = %s"
-            # Add idPlace to the values tuple
             cursor.execute(query, values + (idPlace,))
             connection.commit()
             return {"message": f"Place {idPlace} updated successfully"}, 200
@@ -161,4 +225,4 @@ class PlaceResource(Resource):
 api.add_resource(PlaceResource, '/places', '/places/<int:idPlace>')
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port = 5000)
+    app.run(debug=True, host='0.0.0.0', port=5000)
