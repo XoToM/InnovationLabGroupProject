@@ -3,16 +3,16 @@ import {
   Text, View, StyleSheet, TouchableOpacity, FlatList,
 } from 'react-native';
 import {Link} from 'expo-router'
-import { Float } from 'react-native/Libraries/Types/CodegenTypes';
+import { API_DOMAIN } from '@/constants/config';
 
 export default function PlacesScreen() { //name functions consistently
-  const [places, setPlaces] = useState([]);
+  const [places, setPlaces] = useState<place[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchPlaces = async () => { //limit number of places (pagination)
-      try{
-        const response = await fetch('https://katestudent.pythonanywhere.com/places');
+    const fetchPlaces = async () => {
+      try {
+        const response = await fetch(API_DOMAIN + '/places');
         if (!response.ok){
           throw new Error('Fail to fetch places')
         }
@@ -36,11 +36,11 @@ export default function PlacesScreen() { //name functions consistently
   }
 
   type place = {
-    idPlace: Number;
-    name: String;
-    address: String;
-    latitude: Float;
-    longitude: Float;
+    idPlace: number;
+    name: string;
+    formattedAddress: string;
+    latitude: number;
+    longitude: number;
 };
 
   return (
@@ -55,7 +55,7 @@ export default function PlacesScreen() { //name functions consistently
               pathname: '/screens/place',
               params: {
                 name: item.name.toString(),
-                address: item.address.toString(),
+                formattedAddress: item.formattedAddress.toString(),
                 latitude: item.latitude,
                 longitude: item.longitude,
               },
@@ -63,7 +63,7 @@ export default function PlacesScreen() { //name functions consistently
           >
             <TouchableOpacity style={styles.card}>
             <Text style={styles.title}>{item.name}</Text>
-            <Text style={styles.subTitle}>{item.address}</Text>
+            <Text style={styles.subTitle}>{item.formattedAddress}</Text>
             <Text style={styles.coordinates}>{item.latitude}, {item.longitude}</Text>
             </TouchableOpacity>
           </Link>
@@ -100,4 +100,3 @@ const styles = StyleSheet.create({
     color: '#336'
   },
 });
-
