@@ -24,45 +24,7 @@ const SettingsScreen = () => {
   };
 
   return (
-    <ScrollView style={styles.container}> {/* the whole screen is scrollable */}
-      <View style={styles.header}> {/* header */}
-        <TouchableOpacity style={styles.settingIcon}> {/* button with an icon. later should be linked to other pages */}
-          <Ionicons name="home" size={28} />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Settings</Text>
-        <TouchableOpacity style={styles.settingIcon}>
-          <Ionicons name="close" size={28} />
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.section}> {/* view for first options regarding accessabilities */}
-        <TouchableOpacity style={styles.settingIcon}>
-          <Ionicons name="filter" size={24} /> {/* another icon */}
-        </TouchableOpacity>
-        <View style={styles.optionsContainer}>
-          {Object.entries(accessibilityOptions).map(([key, value]) => ( /* this runs through every accessibility option */
-            <View key={key} style={styles.optionRow}> {/* creates switch for every option */}
-              <Switch value={value} onValueChange={() => toggleOption(key as keyof typeof accessibilityOptions)} />
-              <Text style = {styles.sectionText}>{key}</Text> 
-            </View>
-          ))}
-        </View>
-      </View>
-
-      <View style={styles.section}>
-        <TouchableOpacity style={styles.settingIcon}>
-          <Ionicons name="color-palette" size={24} />
-        </TouchableOpacity>
-        <View style={styles.optionsContainer}>
-          {["Tol", "IBM"].map((palette) => ( /* out of two options listed run through them */
-            <TouchableOpacity key={palette} style={styles.optionRow} onPress={() => setSelectedPalette(palette)}>
-              <Switch value={selectedPalette === palette} onValueChange={() => setSelectedPalette(palette)} />
-              <Text style = {styles.sectionText}>{palette} color palette</Text>
-            </TouchableOpacity> //!!!in future it will use Async storage to save chosen settings!!!
-          ))}
-        </View>
-      </View>
-    </ScrollView>
+    
   );
 };
 
