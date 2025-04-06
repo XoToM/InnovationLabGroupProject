@@ -11,7 +11,7 @@ cors = CORS(app)
 api = Api(app)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CONFIG_PATH = os.path.join(BASE_DIR, 'config_local_test.json')
+CONFIG_PATH = os.path.join(BASE_DIR, 'config.json')
 
 # Read the config from JSON file
 with open(CONFIG_PATH, 'r') as config_file:
