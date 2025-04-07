@@ -1,0 +1,183 @@
+{
+	"info": {
+		"_postman_id": "5d2dd665-1f06-40f1-b970-2c250c3ca93a",
+		"name": "EquiMap",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43361392",
+		"_collection_link": "https://universal-sunset-787573.postman.co/workspace/c8ad3a0d-9bdd-421c-8ca9-9c8ac5633f2b/collection/43361392-5d2dd665-1f06-40f1-b970-2c250c3ca93a?action=share&source=collection_link&creator=43361392"
+	},
+	"item": [
+		{
+			"name": "getPlaces",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}:{{port}}/places",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"places"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getPlaceWithId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}:{{port}}/places/3",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"places",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getPlacesFilter",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}:{{port}}/places?acceptsCashOnly=1",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"places"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Newton Park",
+							"disabled": true
+						},
+						{
+							"key": "wheelchairAccessibleEntrance",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "acceptsCashOnly",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "postPlace",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Poundland\",\r\n    \"formattedAddress\": \"Day 5\",\r\n    \"latitude\": 52.7,\r\n    \"longitude\": 47.2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}:{{port}}/places",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"places"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "postPlaceFull",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Newton Park\",\r\n    \"formattedAddress\": \"Angel 1, London, UK\",\r\n    \"photo\": \"https://example.com/newton-park.jpg\",\r\n    \"wheelchairAccessibleParking\": 1,\r\n    \"wheelchairAccessibleEntrance\": 1,\r\n    \"wheelchairAccessibleRestroom\": 0,\r\n    \"wheelchairAccessDescription\": \"Wheelchair ramp at main entrance\",\r\n    \"inductionLoop\": 0,\r\n    \"inductionLoopDescription\": \"\",\r\n    \"description\": \"A scenic park with walking trails and picnic areas\",\r\n    \"rating\": 2,\r\n    \"priceLevel\": 0,\r\n    \"nationalPhoneNumber\": \"+442012345678\",\r\n    \"latitude\": 52.7,\r\n    \"longitude\": 47.2,\r\n    \"regularOpeningHours\": \"Mon-Sun 08:00-18:00\",\r\n    \"delivery\": 0,\r\n    \"takeout\": 0,\r\n    \"dineIn\": 0,\r\n    \"outdoorSeating\": 1,\r\n    \"liveMusic\": 0,\r\n    \"allowsDogs\": 1,\r\n    \"goodForChildren\": 1,\r\n    \"goodForGroups\": 1,\r\n    \"goodForWatchingSports\": 0,\r\n    \"restroom\": 1,\r\n    \"reservable\": 0,\r\n    \"curbsidePickup\": 0,\r\n    \"menuForChildren\": 0,\r\n    \"acceptsCreditCards\": 0,\r\n    \"acceptsDebitCards\": 0,\r\n    \"acceptsCashOnly\": 1,\r\n    \"acceptsNfc\": 0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}:{{port}}/places",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"places"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deletePlaceById",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{host}}:{{port}}/places/2",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"places",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updadeById",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"wheelchairAccessibleEntrance\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}:{{port}}/places/1",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"places",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
