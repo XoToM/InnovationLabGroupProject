@@ -1,14 +1,6 @@
 import React, { useState } from 'react';
+import { View, Text, Button, Modal, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 
-import {
-  View,
-  Text,
-  Button,
-  Modal,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
 
 export default function filter() {
   const [isModalVisible, setIsModalVisible] = useState(false);
