@@ -1,11 +1,13 @@
 
 import { Link } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { View, Text, Button,Image, StyleSheet,FlatList } from 'react-native';
+import { View, Text, Button,Image, StyleSheet,FlatList, Platform } from 'react-native';
 import Mapbox, {MapView,StyleURL} from "@rnmapbox/maps";
 
-Mapbox.setAccessToken("");
+
+Mapbox.setAccessToken("");	//	insert mapbox public token here
 Mapbox.setTelemetryEnabled(false);
+
 
 const styles = StyleSheet.create({
 	mapMenu:{
@@ -49,6 +51,7 @@ export default function ScreenMap() {
 		{name:"Castle", img:"https://nt.global.ssl.fastly.net/binaries/content/gallery/website/national/regions/sussex/places/bodiam-castle/library/winter/bodiam-castle-and-moat-in-winter-1456846.jpg"}
 		];
 	return (
+		Platform.select({android:()=>
 		<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 			<MapView style={StyleSheet.absoluteFillObject}></MapView>
 			{/*<View style={[styles.mapMenu, {padding:10}]}> styleURL={StyleURL.Street}
@@ -57,6 +60,6 @@ export default function ScreenMap() {
 				<Text style={styles.header}>Featured</Text>
 				<FlatList horizontal={true} data={locations1} renderItem={(i)=><LocationPreview info={i.item}/>} ItemSeparatorComponent={() => <View style={{height:1,width: 10}} />}/>
 			</View>*/}
-		</View>
+		</View>})
 	);
 }

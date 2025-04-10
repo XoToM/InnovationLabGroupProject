@@ -1,11 +1,9 @@
-import Mapbox, { MapView } from '@rnmapbox/maps';
 import { Link, SplashScreen } from 'expo-router';
 import { View, Text, Button,StyleSheet } from 'react-native';
 
 
 export default function ScreensInitial() {
 	SplashScreen.hideAsync();
-	//console.log("Test");
 	return (
 	  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 		<Text style={{color:"red"}}>Initial screen</Text>
