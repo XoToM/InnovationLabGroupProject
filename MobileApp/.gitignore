@@ -36,7 +36,3 @@ yarn-error.*
 *.tsbuildinfo
 
 app-example
-
-# Tokens file (DO NOT COMMIT)
-tokens.js
-android/gradle.properties
