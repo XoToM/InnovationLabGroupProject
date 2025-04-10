@@ -2,10 +2,9 @@
 import { Link } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { View, Text, Button,Image, StyleSheet,FlatList } from 'react-native';
-import Mapbox, {MapView} from "@rnmapbox/maps";
-import tokens from "../../tokens.json";
+import Mapbox, {MapView,StyleURL} from "@rnmapbox/maps";
 
-Mapbox.setAccessToken(tokens.mapbox);
+Mapbox.setAccessToken("");
 Mapbox.setTelemetryEnabled(false);
 
 const styles = StyleSheet.create({
@@ -51,13 +50,13 @@ export default function ScreenMap() {
 		];
 	return (
 		<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-			<MapView style={{flex:1}}></MapView>
-			<View style={[styles.mapMenu, {padding:10}]}>
+			<MapView style={StyleSheet.absoluteFillObject}></MapView>
+			{/*<View style={[styles.mapMenu, {padding:10}]}> styleURL={StyleURL.Street}
 				<Text style={styles.header}>Featured</Text>
 				<FlatList horizontal={true} data={locations1} renderItem={(i)=><LocationPreview info={i.item}/>} ItemSeparatorComponent={() => <View style={{height:1,width: 10}} />}/>
 				<Text style={styles.header}>Featured</Text>
 				<FlatList horizontal={true} data={locations1} renderItem={(i)=><LocationPreview info={i.item}/>} ItemSeparatorComponent={() => <View style={{height:1,width: 10}} />}/>
-			</View>
+			</View>*/}
 		</View>
 	);
 }

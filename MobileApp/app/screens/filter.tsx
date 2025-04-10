@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Button, Modal, StyleSheet, TouchableOpacity } from 'react-native';
-import Slider from '@react-native-community/slider';
+//import Slider from '@react-native-community/slider';
 
 export default function App() {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -85,7 +85,7 @@ export default function App() {
             {/* Distance Slider */}
             <View style={styles.distanceContainer}>
               <Text style={styles.distanceText}>Distance: {distance} km</Text>
-              <Slider
+              {/*<Slider
                 style={styles.slider}
                 minimumValue={1}  // Minimum distance (1 km)
                 maximumValue={50} // Maximum distance (50 km)
@@ -95,7 +95,7 @@ export default function App() {
                 minimumTrackTintColor="#1EB1FC"
                 maximumTrackTintColor="#d3d3d3"
                 thumbTintColor="#1EB1FC"
-              />
+              />*/}
             </View>
           </View>
         </View>

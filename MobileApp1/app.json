@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "MobileApp",
-    "slug": "MobileApp",
+    "name": "equimap",
+    "slug": "equimap",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -16,7 +16,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.MobileApp"
+      "package": "com.anonymous.equimap"
     },
     "web": {
       "bundler": "metro",
@@ -33,17 +33,14 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ],
-      [
-        "@rnmapbox/maps",
-        {
-          "RNMapboxMapsVersion": "11.0.0",
-          "RNMapboxMapsDownloadToken": ""
-        }
       ]
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "assetBundlePatterns": [
+      "**/*",
+      "node_modules/expo-router/entry.bundle"
+    ]
   }
 }

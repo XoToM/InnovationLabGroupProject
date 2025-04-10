@@ -25,7 +25,8 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="myapp"/>
-        <data android:scheme="com.anonymous.MobileApp"/>
+        <data android:scheme="com.anonymous.equimap"/>
+        <data android:scheme="exp+equimap"/>
       </intent-filter>
     </activity>
   </application>
