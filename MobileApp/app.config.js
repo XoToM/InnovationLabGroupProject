@@ -1,4 +1,6 @@
-{
+import 'dotenv/config'
+
+module.exports = {
   "expo": {
     "name": "MobileApp",
     "slug": "MobileApp",
@@ -38,12 +40,15 @@
         "@rnmapbox/maps",
         {
           "RNMapboxMapsVersion": "11.0.0",
-          "RNMapboxMapsDownloadToken": ""
+          "RNMapboxMapsDownloadToken": process.env.MAPBOX_DOWNLOAD_TOKEN
         }
       ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra":{
+      "MAPBOX_ACCESS_TOKEN":process.env.MAPBOX_ACCESS_TOKEN 
     }
   }
-}
+};

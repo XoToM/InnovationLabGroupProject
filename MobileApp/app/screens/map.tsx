@@ -3,9 +3,9 @@ import { Link } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { View, Text, Button,Image, StyleSheet,FlatList, Platform } from 'react-native';
 import Mapbox, {MapView,StyleURL} from "@rnmapbox/maps";
+import Constants from 'expo-constants';
 
-
-Mapbox.setAccessToken("");	//	insert mapbox public token here
+Mapbox.setAccessToken(Constants.expoConfig?.extra?.MAPBOX_ACCESS_TOKEN);	//	insert mapbox public token here
 Mapbox.setTelemetryEnabled(false);
 
 
