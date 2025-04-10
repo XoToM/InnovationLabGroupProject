@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import {
   View,
   Text,
@@ -10,27 +9,26 @@ import {
   ScrollView,
 } from 'react-native';
 
-export default function filter() {
+export default function Filter() {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [distance, setDistance] = useState(20);
 
   // ✅ Filter types
-  type FilterKey = 'wheelchairAccess' | 'popularity' | 'ratings' | 'hearingLoop';
+  type FilterKey = 'wheelchairAccessibleEntrance' | 'allowsDogs' | 'ratings' | 'inductionLoop';
   type Filters = Record<FilterKey, boolean>;
 
   const [filters, setFilters] = useState<Filters>({
-    wheelchairAccess: false,
-    popularity: false,
+    wheelchairAccessibleEntrance: false,
+    allowsDogs: false,
     ratings: false,
-    hearingLoop: false,
+    inductionLoop: false,
   });
 
   // 🔁 Filter options
   const filterOptions: { key: FilterKey; label: string }[] = [
-    { key: 'wheelchairAccess', label: 'Wheelchair Access' },
-    { key: 'popularity', label: 'Popularity' },
+    { key: 'wheelchairAccessibleEntrance' , label: 'Wheelchair Access' },
+    { key: 'allowsDogs', label: 'Dogs Allowed' },
     { key: 'ratings', label: 'Ratings' },
-    { key: 'hearingLoop', label: 'Hearing Loop' },
+    { key: 'inductionLoop', label: 'Hearing Loop' },
   ];
 
   const toggleModal = () => setIsModalVisible(!isModalVisible);
@@ -40,32 +38,33 @@ export default function filter() {
     const newValue = !filters[key];
     const updatedFilters = { ...filters, [key]: newValue };
     setFilters(updatedFilters);
-
+  
     const activeFilters = Object.entries(updatedFilters)
       .filter(([_, value]) => value)
-      .map(([filterKey]) => `${filterKey}=true`)
+      .map(([filterKey]) => `${filterKey}=1`)
       .join('&');
-
-    const queryString = `${activeFilters}&distance=${distance}`;
-
+  
+    const queryString = activeFilters ? `?${activeFilters}` : '';
+  
     try {
-      const response = await fetch(`https://katestudent.pythonanywhere.com:443/places${queryString}`, { //before query string put api endpoint link
+      const url = `https://katestudent.pythonanywhere.com:443/places${queryString}`;
+      console.log('📡 Fetching with URL:', url); // 👈 debug print to see if api call is right
+      const response = await fetch(url, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
       });
-
+      // below for debugging 
       if (!response.ok) throw new Error('API request failed');
-
+  
       const data = await response.json();
-
-      // ✅ Print to Metro terminal
-      console.log('Fetched Locations:', data);
+      console.log('✅ Fetched Locations:', data);
     } catch (err) {
-      console.error('Fetch error:', err);
+      console.error('❌ Fetch error:', err);
     }
   };
+  
 
   return (
     <View style={styles.container}>
@@ -92,21 +91,6 @@ export default function filter() {
                 </TouchableOpacity>
               ))}
             </ScrollView>
-
-            <View style={styles.distanceContainer}>
-              <Text style={styles.distanceText}>Distance: {distance} km</Text>
-              {/*<Slider
-                style={styles.slider}
-                minimumValue={1}
-                maximumValue={50}
-                step={1}
-                value={distance}
-                onValueChange={(value: number) => setDistance(value)}
-                minimumTrackTintColor="#1EB1FC"
-                maximumTrackTintColor="#d3d3d3"
-                thumbTintColor="#1EB1FC"
-              />*/}
-            </View>
           </View>
         </View>
       </Modal>
@@ -149,7 +133,4 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   checkboxText: { fontSize: 16 },
-  distanceContainer: { marginTop: 20 },
-  distanceText: { fontSize: 16, marginBottom: 10 },
-  slider: { width: '100%' },
 });
