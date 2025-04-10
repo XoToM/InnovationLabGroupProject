@@ -5,8 +5,10 @@ import { View, Text, Button,Image, StyleSheet,FlatList, Platform } from 'react-n
 import Mapbox, {MapView,StyleURL} from "@rnmapbox/maps";
 import Constants from 'expo-constants';
 
-Mapbox.setAccessToken(Constants.expoConfig?.extra?.MAPBOX_ACCESS_TOKEN);	//	insert mapbox public token here
-Mapbox.setTelemetryEnabled(false);
+if(Constants.expoConfig?.extra?.MAPBOX_ACCESS_TOKEN){
+	Mapbox.setAccessToken(Constants.expoConfig.extra.MAPBOX_ACCESS_TOKEN);	//	insert mapbox public token here
+	Mapbox.setTelemetryEnabled(false);
+}
 
 
 const styles = StyleSheet.create({
@@ -51,15 +53,14 @@ export default function ScreenMap() {
 		{name:"Castle", img:"https://nt.global.ssl.fastly.net/binaries/content/gallery/website/national/regions/sussex/places/bodiam-castle/library/winter/bodiam-castle-and-moat-in-winter-1456846.jpg"}
 		];
 	return (
-		Platform.select({android:()=>
 		<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-			<MapView style={StyleSheet.absoluteFillObject}></MapView>
+			{Constants.expoConfig?.extra?.MAPBOX_ACCESS_TOKEN?<MapView style={StyleSheet.absoluteFillObject}></MapView>:<Text style={StyleSheet.absoluteFillObject}>No tokens provided</Text>}
 			{/*<View style={[styles.mapMenu, {padding:10}]}> styleURL={StyleURL.Street}
 				<Text style={styles.header}>Featured</Text>
 				<FlatList horizontal={true} data={locations1} renderItem={(i)=><LocationPreview info={i.item}/>} ItemSeparatorComponent={() => <View style={{height:1,width: 10}} />}/>
 				<Text style={styles.header}>Featured</Text>
 				<FlatList horizontal={true} data={locations1} renderItem={(i)=><LocationPreview info={i.item}/>} ItemSeparatorComponent={() => <View style={{height:1,width: 10}} />}/>
 			</View>*/}
-		</View>})
+		</View>
 	);
 }
