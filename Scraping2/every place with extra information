@@ -1,0 +1,310 @@
+import requests
+
+places = [
+  {
+    "name": "Green Park Brasserie",
+    "guideDogsPermitted": 1,
+    "highchair": 1,
+    "nonSmokingAreas": 1,
+    "parkingOffSite": 1,
+    "allowsDogs": 1,
+    "menuForChildren": 1,
+    "goodForGroups": 1
+  },
+  {
+    "name": "Eat A Pitta - Bath",
+    "guideDogsPermitted": 0,
+    "highchair": 1,
+    "nonSmokingAreas": 0,
+    "parkingOffSite": 0,
+    "allowsDogs": 1,
+    "menuForChildren": 0,
+    "goodForGroups": 1
+  },
+  {
+    "name": "The Elder Restaurant",
+    "guideDogsPermitted": 0,
+    "highchair": 0,
+    "nonSmokingAreas": 0,
+    "parkingOffSite": 0,
+    "allowsDogs": 1,
+    "menuForChildren": 0,
+    "goodForGroups": 0
+  },
+  {
+    "name": "Chew Valley Distillery",
+    "guideDogsPermitted": 0,
+    "highchair": 0,
+    "nonSmokingAreas": 0,
+    "parkingOffSite": 0,
+    "allowsDogs": 1,
+    "menuForChildren": 0,
+    "goodForGroups": 1
+  },
+  {
+    "name": "Abbey Hotel Bath, a Tribute Portfolio Hotel",
+    "guideDogsPermitted": 0,
+    "highchair": 1,
+    "nonSmokingAreas": 0,
+    "parkingOffSite": 0,
+    "allowsDogs": 1,
+    "menuForChildren": 1,
+    "goodForGroups": 0
+  },
+  {
+    "name": "LEON Bath",
+    "guideDogsPermitted": 0,
+    "highchair": 1,
+    "nonSmokingAreas": 0,
+    "parkingOffSite": 0,
+    "allowsDogs": 1,
+    "menuForChildren": 1,
+    "goodForGroups": 0
+  },
+  {
+    "name": "Bath Pizza Co",
+    "guideDogsPermitted": 0,
+    "highchair": 1,
+    "nonSmokingAreas": 0,
+    "parkingOffSite": 0,
+    "allowsDogs": 1,
+    "menuForChildren": 0,
+    "goodForGroups": 1
+  },
+  {
+    "name": "The Pump Room Restaurant",
+    "guideDogsPermitted": 0,
+    "highchair": 0,
+    "nonSmokingAreas": 0,
+    "parkingOffSite": 0,
+    "allowsDogs": 0,
+    "menuForChildren": 0,
+    "goodForGroups": 0
+  },
+  {
+    "name": "Flourish CSR",
+    "guideDogsPermitted": 0,
+    "highchair": 1,
+    "nonSmokingAreas": 0,
+    "parkingOffSite": 0,
+    "allowsDogs": 1,
+    "menuForChildren": 1,
+    "goodForGroups": 0
+  },
+  {
+    "name": "The Gainsborough Bath Spa",
+    "guideDogsPermitted": 0,
+    "highchair": 0,
+    "nonSmokingAreas": 0,
+    "parkingOffSite": 0,
+    "allowsDogs": 1,
+    "menuForChildren": 0,
+    "goodForGroups": 0
+  },
+  {
+    "name": "The Bath Stable",
+    "guideDogsPermitted": 0,
+    "highchair": 1,
+    "nonSmokingAreas": 0,
+    "parkingOffSite": 0,
+    "allowsDogs": 1,
+    "menuForChildren": 1,
+    "goodForGroups": 0
+  },
+  {
+    "name": "The Bath Townhouse",
+    "guideDogsPermitted": 0,
+    "highchair": 1,
+    "nonSmokingAreas": 0,
+    "parkingOffSite": 0,
+    "allowsDogs": 1,
+    "menuForChildren": 1,
+    "goodForGroups": 0
+  },
+  {
+    "name": "Bandook - Indian Restaurant, Bath",
+    "guideDogsPermitted": 0,
+    "highchair": 1,
+    "nonSmokingAreas": 0,
+    "parkingOffSite": 0,
+    "allowsDogs": 0,
+    "menuForChildren": 0,
+    "goodForGroups": 0
+  },
+  {
+    "name": "Bath Cider House",
+    "guideDogsPermitted": 0,
+    "highchair": 0,
+    "nonSmokingAreas": 0,
+    "parkingOffSite": 0,
+    "allowsDogs": 1,
+    "menuForChildren": 0,
+    "goodForGroups": 0
+  },
+  {
+    "name": "Bowood Hotel, Spa & Golf Resort",
+    "guideDogsPermitted": 0,
+    "highchair": 1,
+    "nonSmokingAreas": 0,
+    "parkingOffSite": 0,
+    "allowsDogs": 0,
+    "menuForChildren": 0,
+    "goodForGroups": 0
+  },
+  {
+    "name": "The Gainsborough Bath Spa",
+    "guideDogsPermitted": 0,
+    "highchair": 1,
+    "nonSmokingAreas": 0,
+    "parkingOffSite": 0,
+    "allowsDogs": 0,
+    "menuForChildren": 0,
+    "goodForGroups": 0
+  },
+  {
+    "name": "Flourish at Farleigh Road",
+    "guideDogsPermitted": 0,
+    "highchair": 1,
+    "nonSmokingAreas": 0,
+    "parkingOffSite": 0,
+    "allowsDogs": 1,
+    "menuForChildren": 1,
+    "goodForGroups": 0
+  },
+  {
+    "name": "The Cork",
+    "guideDogsPermitted": 0,
+    "highchair": 0,
+    "nonSmokingAreas": 0,
+    "parkingOffSite": 0,
+    "allowsDogs": 0,
+    "menuForChildren": 0,
+    "goodForGroups": 0
+  },
+  {
+    "name": "Olive Tree Restaurant",
+    "guideDogsPermitted": 0,
+    "highchair": 0,
+    "nonSmokingAreas": 0,
+    "parkingOffSite": 0,
+    "allowsDogs": 0,
+    "menuForChildren": 0,
+    "goodForGroups": 0
+  },
+  {
+    "name": "Woodchester Valley Vineyard",
+    "guideDogsPermitted": 0,
+    "highchair": 0,
+    "nonSmokingAreas": 0,
+    "parkingOffSite": 0,
+    "allowsDogs": 1,
+    "menuForChildren": 0,
+    "goodForGroups": 0
+  },
+  {
+    "name": "Apex City of Bath Hotel",
+    "guideDogsPermitted": 0,
+    "highchair": 0,
+    "nonSmokingAreas": 0,
+    "parkingOffSite": 0,
+    "allowsDogs": 0,
+    "menuForChildren": 0,
+    "goodForGroups": 0
+  },
+  {
+    "name": "Corkage Bath",
+    "guideDogsPermitted": 0,
+    "highchair": 1,
+    "nonSmokingAreas": 0,
+    "parkingOffSite": 0,
+    "allowsDogs": 1,
+    "menuForChildren": 0,
+    "goodForGroups": 0
+  },
+  {
+    "name": "The Beefy Boys - Bath",
+    "guideDogsPermitted": 0,
+    "highchair": 1,
+    "nonSmokingAreas": 0,
+    "parkingOffSite": 0,
+    "allowsDogs": 1,
+    "menuForChildren": 1,
+    "goodForGroups": 0
+  },
+  {
+    "name": "Brasserie Beau",
+    "guideDogsPermitted": 0,
+    "highchair": 1,
+    "nonSmokingAreas": 0,
+    "parkingOffSite": 0,
+    "allowsDogs": 1,
+    "menuForChildren": 1,
+    "goodForGroups": 0
+  },
+  {
+    "name": "The Langford Inn",
+    "guideDogsPermitted": 0,
+    "highchair": 1,
+    "nonSmokingAreas": 0,
+    "parkingOffSite": 0,
+    "allowsDogs": 1,
+    "menuForChildren": 1,
+    "goodForGroups": 0
+  },
+  {
+    "name": "Bath Brew House",
+    "guideDogsPermitted": 0,
+    "highchair": 1,
+    "nonSmokingAreas": 0,
+    "parkingOffSite": 0,
+    "allowsDogs": 0,
+    "menuForChildren": 1,
+    "goodForGroups": 0
+  },
+  {
+    "name": "Newton Farm Shop & Cafe",
+    "guideDogsPermitted": 0,
+    "highchair": 0,
+    "nonSmokingAreas": 0,
+    "parkingOffSite": 0,
+    "allowsDogs": 0,
+    "menuForChildren": 0,
+    "goodForGroups": 0
+  }
+]
+
+
+url = "https://katestudent.pythonanywhere.com:443/places"
+
+headers = {
+    "Content-Type": "application/json"
+}
+
+
+
+
+for place in places:
+    try:
+        if "name" not in place:
+            print(f"Skipping {place.get('name', 'Unknown')}: Must provide 'name' to identify the place")
+            continue
+
+        name = place["name"]
+        query_params = {"name": name}
+
+        full_url = requests.Request('PATCH', url, params=query_params).prepare().url
+
+        update_payload = {key: value for key, value in place.items() if key != "name"}
+
+        response = requests.patch(full_url, json=update_payload, headers=headers)
+
+        if response.status_code == 200:
+            print(f"Successfully updated {place['name']}")
+        else:
+            print(f"Failed to update {place['name']}. Status code: {response.status_code}")
+            print(f"Response: {response.text}")
+
+    except requests.exceptions.RequestException as e:
+        print(f"Error updating {place.get('name', 'Unknown')}: {str(e)}")
+
+print("Finished updating all places")
