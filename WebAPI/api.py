@@ -18,7 +18,6 @@ with open(CONFIG_PATH, 'r') as config_file:
     config = json.load(config_file)
     db_config = config['db_config']
 
-# Function to create database connection
 def get_db_connection():
     try:
         connection = mysql.connector.connect(**db_config)
@@ -27,85 +26,58 @@ def get_db_connection():
         print(f"Error connecting to MySQL: {e}")
         return None
 
-# Request parser for POST requests (required fields for creating a new place)
-def create_place_parser():
+def create_parser(required_fields=False):
     parser = reqparse.RequestParser()
-    parser.add_argument('name', type=str, required=True, help='Name cannot be blank')
-    parser.add_argument('formattedAddress', type=str, required=True, help='Formatted address cannot be blank')
-    parser.add_argument('photo', type=str, required=False)
-    parser.add_argument('wheelchairAccessibleParking', type=int, required=False)
-    parser.add_argument('wheelchairAccessibleEntrance', type=int, required=False)
-    parser.add_argument('wheelchairAccessibleRestroom', type=int, required=False)
-    parser.add_argument('wheelchairAccessDescription', type=str, required=False)
-    parser.add_argument('inductionLoop', type=int, required=False)
-    parser.add_argument('inductionLoopDescription', type=str, required=False)
-    parser.add_argument('description', type=str, required=False)
-    parser.add_argument('rating', type=int, required=False)
-    parser.add_argument('priceLevel', type=int, required=False)
-    parser.add_argument('nationalPhoneNumber', type=str, required=False)
-    parser.add_argument('latitude', type=float, required=True, help='Latitude cannot be blank')
-    parser.add_argument('longitude', type=float, required=True, help='Longitude cannot be blank')
-    parser.add_argument('regularOpeningHours', type=str, required=False)
-    parser.add_argument('delivery', type=int, required=False)
-    parser.add_argument('takeout', type=int, required=False)
-    parser.add_argument('dineIn', type=int, required=False)
-    parser.add_argument('outdoorSeating', type=int, required=False)
-    parser.add_argument('liveMusic', type=int, required=False)
-    parser.add_argument('allowsDogs', type=int, required=False)
-    parser.add_argument('goodForChildren', type=int, required=False)
-    parser.add_argument('goodForGroups', type=int, required=False)
-    parser.add_argument('goodForWatchingSports', type=int, required=False)
-    parser.add_argument('restroom', type=int, required=False)
-    parser.add_argument('reservable', type=int, required=False)
-    parser.add_argument('curbsidePickup', type=int, required=False)
-    parser.add_argument('menuForChildren', type=int, required=False)
-    parser.add_argument('acceptsCreditCards', type=int, required=False)
-    parser.add_argument('acceptsDebitCards', type=int, required=False)
-    parser.add_argument('acceptsCashOnly', type=int, required=False)
-    parser.add_argument('acceptsNfc', type=int, required=False)
+    fields = [
+        ('name', str, 'Name cannot be blank'),
+        ('formattedAddress', str, 'Formatted address cannot be blank'),
+        ('photo', str, None),
+        ('wheelchairAccessibleParking', int, None),
+        ('wheelchairAccessibleEntrance', int, None),
+        ('wheelchairAccessibleRestroom', int, None),
+        ('wheelchairAccessDescription', str, None),
+        ('inductionLoop', int, None),
+        ('inductionLoopDescription', str, None),
+        ('description', str, None),
+        ('rating', int, None),
+        ('priceLevel', int, None),
+        ('nationalPhoneNumber', str, None),
+        ('latitude', float, 'Latitude cannot be blank'),
+        ('longitude', float, 'Longitude cannot be blank'),
+        ('regularOpeningHours', str, None),
+        ('delivery', int, None),
+        ('takeout', int, None),
+        ('dineIn', int, None),
+        ('outdoorSeating', int, None),
+        ('liveMusic', int, None),
+        ('allowsDogs', int, None),
+        ('goodForChildren', int, None),
+        ('goodForGroups', int, None),
+        ('goodForWatchingSports', int, None),
+        ('restroom', int, None),
+        ('reservable', int, None),
+        ('curbsidePickup', int, None),
+        ('menuForChildren', int, None),
+        ('acceptsCreditCards', int, None),
+        ('acceptsDebitCards', int, None),
+        ('acceptsCashOnly', int, None),
+        ('acceptsNfc', int, None),
+    ]
+
+    for field_name, field_type, help_text in fields:
+        #for POST name, formattedAddress, latitude, and longitude should be required
+        is_required = required_fields and field_name in ['name', 'formattedAddress', 'latitude', 'longitude']
+        parser.add_argument(
+            field_name,
+            type=field_type,
+            required=is_required,
+            help=help_text if is_required else None
+        )
+    
     return parser
 
-place_parser = create_place_parser()
-
-# Request parser for PATCH requests (all fields are optional for updates)
-def create_patch_parser():
-    parser = reqparse.RequestParser()
-    parser.add_argument('name', type=str, required=False)
-    parser.add_argument('formattedAddress', type=str, required=False)
-    parser.add_argument('photo', type=str, required=False)
-    parser.add_argument('wheelchairAccessibleParking', type=int, required=False)
-    parser.add_argument('wheelchairAccessibleEntrance', type=int, required=False)
-    parser.add_argument('wheelchairAccessibleRestroom', type=int, required=False)
-    parser.add_argument('wheelchairAccessDescription', type=str, required=False)
-    parser.add_argument('inductionLoop', type=int, required=False)
-    parser.add_argument('inductionLoopDescription', type=str, required=False)
-    parser.add_argument('description', type=str, required=False)
-    parser.add_argument('rating', type=int, required=False)
-    parser.add_argument('priceLevel', type=int, required=False)
-    parser.add_argument('nationalPhoneNumber', type=str, required=False)
-    parser.add_argument('latitude', type=float, required=False)
-    parser.add_argument('longitude', type=float, required=False)
-    parser.add_argument('regularOpeningHours', type=str, required=False)
-    parser.add_argument('delivery', type=int, required=False)
-    parser.add_argument('takeout', type=int, required=False)
-    parser.add_argument('dineIn', type=int, required=False)
-    parser.add_argument('outdoorSeating', type=int, required=False)
-    parser.add_argument('liveMusic', type=int, required=False)
-    parser.add_argument('allowsDogs', type=int, required=False)
-    parser.add_argument('goodForChildren', type=int, required=False)
-    parser.add_argument('goodForGroups', type=int, required=False)
-    parser.add_argument('goodForWatchingSports', type=int, required=False)
-    parser.add_argument('restroom', type=int, required=False)
-    parser.add_argument('reservable', type=int, required=False)
-    parser.add_argument('curbsidePickup', type=int, required=False)
-    parser.add_argument('menuForChildren', type=int, required=False)
-    parser.add_argument('acceptsCreditCards', type=int, required=False)
-    parser.add_argument('acceptsDebitCards', type=int, required=False)
-    parser.add_argument('acceptsCashOnly', type=int, required=False)
-    parser.add_argument('acceptsNfc', type=int, required=False)
-    return parser
-
-patch_parser = create_patch_parser()
+place_parser = create_parser(required_fields=True)  # For POST requests
+patch_parser = create_parser(required_fields=False)  # For PATCH requests
 
 # Place Resource
 class PlaceResource(Resource):
@@ -230,7 +202,6 @@ class PlaceResource(Resource):
             cursor.close()
             connection.close()
 
-# Add resource to API
 api.add_resource(PlaceResource, '/places', '/places/<int:idPlace>')
 
 if __name__ == '__main__':

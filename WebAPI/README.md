@@ -13,5 +13,5 @@ python api.py
 #Test
 
 1. Open Postman (shared link) => Collection "EquiMap"
-1. Select environment "Local" (top right)
+1. Select environment "pythoneverywhere" (top right)
 1. Open Request "getPlaces" and press "Send"
