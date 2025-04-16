@@ -1,7 +1,9 @@
-{
+import 'dotenv/config'
+
+module.exports = {
   "expo": {
-    "name": "equimap",
-    "slug": "equimap",
+    "name": "MobileApp",
+    "slug": "MobileApp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -15,7 +17,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.anonymous.MobileApp"
     },
     "web": {
       "bundler": "metro",
@@ -32,10 +35,20 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      [
+        "@rnmapbox/maps",
+        {
+          "RNMapboxMapsVersion": "11.0.0",
+          "RNMapboxMapsDownloadToken": process.env.MAPBOX_DOWNLOAD_TOKEN
+        }
       ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra":{
+      "MAPBOX_ACCESS_TOKEN":process.env.MAPBOX_ACCESS_TOKEN 
     }
   }
-}
+};
