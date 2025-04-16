@@ -19,7 +19,7 @@ export default function ScreensInitial() {
     </View>
   );
 }
-=======
+
 import { Link, SplashScreen } from 'expo-router';
 import { View, Text, Button,StyleSheet } from 'react-native';
 
