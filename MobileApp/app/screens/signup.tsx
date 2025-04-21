@@ -13,8 +13,8 @@ import {
 import { Input, Button } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useAuth } from "./context";
-import { colors, commonStyles } from "../common";
+import { useAuth } from "../../constants/auth-context";
+import { colors, commonStyles } from "../../constants/common";
 import { Feather, AntDesign } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";

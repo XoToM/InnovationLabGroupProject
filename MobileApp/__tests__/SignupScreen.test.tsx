@@ -1,9 +1,9 @@
 import React from "react";
 import { render, fireEvent, waitFor, act } from "@testing-library/react-native";
 import SignupScreen from "../app/screens/signup";
-import { AuthContext } from "../app/screens/context";
+import { AuthContext } from "../constants/auth-context";
 import { Alert } from "react-native";
-import { AuthProvider } from "../app/screens/context";
+import { AuthProvider } from "../constants/auth-context";
 
 const mockNavigate = jest.fn();
 const mockSetOptions = jest.fn();

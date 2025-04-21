@@ -1,8 +1,8 @@
 
 import { Link } from 'expo-router';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Button,Image, StyleSheet,FlatList, Platform } from 'react-native';
-import Mapbox, {MapView,StyleURL} from "@rnmapbox/maps";
+import Mapbox, {Camera, LocationPuck, MapView,MarkerView,StyleURL} from "@rnmapbox/maps";
 import Constants from 'expo-constants';
 
 if(Constants.expoConfig?.extra?.MAPBOX_ACCESS_TOKEN){
@@ -54,7 +54,37 @@ export default function ScreenMap() {
 		];
 	return (
 		<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-			{Constants.expoConfig?.extra?.MAPBOX_ACCESS_TOKEN?<MapView style={StyleSheet.absoluteFillObject}></MapView>:<Text style={StyleSheet.absoluteFillObject}>No tokens provided</Text>}
+			{Constants.expoConfig?.extra?.MAPBOX_ACCESS_TOKEN?<MapView style={StyleSheet.absoluteFillObject}>
+			{/*
+				<MarkerView coordinate={[0,0]}>
+					<View style={{ 
+							alignItems: 'center',
+							backgroundColor: 'red',
+							borderRadius: 30,
+							bottom: 16,
+							justifyContent: 'center',
+							left: 48,
+							minHeight: 60,
+							paddingVertical: 16,
+							position: 'absolute',
+							right: 48
+						}}>
+						<LocationPuck
+							topImage="topImage"
+							visible={true}
+							scale={['interpolate', ['linear'], ['zoom'], 10, 1.0, 20, 4.0]}
+							pulsing={{
+								isEnabled: true,
+								color: 'teal',
+								radius: 50.0,
+							}}
+						/>
+						<Text>Tap on map to add a point annotation</Text>
+					</View>
+				</MarkerView>
+						*/}
+				<Camera followUserLocation={true}/>
+			</MapView>:<Text style={StyleSheet.absoluteFillObject}>No tokens provided</Text>}
 			{/*<View style={[styles.mapMenu, {padding:10}]}> styleURL={StyleURL.Street}
 				<Text style={styles.header}>Featured</Text>
 				<FlatList horizontal={true} data={locations1} renderItem={(i)=><LocationPreview info={i.item}/>} ItemSeparatorComponent={() => <View style={{height:1,width: 10}} />}/>

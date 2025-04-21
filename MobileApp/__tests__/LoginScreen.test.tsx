@@ -15,9 +15,9 @@ jest.mock("@react-navigation/native", () => {
 import React from "react";
 import { render, fireEvent, waitFor, act } from "@testing-library/react-native";
 import LoginScreen from "../app/screens/login";
-import { AuthContext } from "../app/screens/context";
+import { AuthContext } from "../constants/auth-context";
 import { Alert } from "react-native";
-import { AuthProvider } from "../app/screens/context";
+import { AuthProvider } from "../constants/auth-context";
 
 jest.spyOn(Alert, "alert");
 
