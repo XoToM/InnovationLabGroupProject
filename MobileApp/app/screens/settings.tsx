@@ -3,30 +3,47 @@ import { View, Text, ScrollView, TouchableOpacity, Switch, StyleSheet } from "re
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+type AccessibilityOptions = {
+  "Wheelchair user": boolean;
+  "Guide dog owner": boolean;
+  "Social anxiety": boolean;
+};
 
 const SettingsScreen = () => {
   {/* коментар */}
-  const [accessibilityOptions, setAccessibilityOptions] = useState({ //multiple choice option
+  const defaultAccessibilityOptions: AccessibilityOptions = {
     "Wheelchair user": false,
-    "Hearing loop": false,
     "Guide dog owner": false,
     "Social anxiety": false,
-  });
+  };
+  const [accessibilityOptions, setAccessibilityOptions] = useState<AccessibilityOptions>(defaultAccessibilityOptions);
 
   const [selectedPalette, setSelectedPalette] = useState("IBM"); //current palette and a function to set it (IBM - default choice)
 
-  useEffect(() => { //it loads the palette if it's saved
-    const loadPalette = async () => {
+  useEffect(() => { 
+    const loadSettings = async () => { //it loads the settings if they're saved
       try {
         const savedPalette = await AsyncStorage.getItem("selectedPalette");
         if (savedPalette) {
           setSelectedPalette(savedPalette);
         }
+
+        const savedOptions = await AsyncStorage.getItem("accessibilityOptions");
+        if (savedOptions) {
+          const parsedOptions = JSON.parse(savedOptions);
+          const validOptions = { ...defaultAccessibilityOptions };
+          Object.keys(defaultAccessibilityOptions).forEach((key) => {
+            if (parsedOptions.hasOwnProperty(key)) {
+              validOptions[key as keyof AccessibilityOptions] = !!parsedOptions[key];
+            }
+          });
+          setAccessibilityOptions(validOptions);
+        }
       } catch (error) {
-        console.error("Failed to load palette from storage:", error);
+        console.error("Failed to load settings from storage:", error);
       }
     };
-    loadPalette();
+    loadSettings();
   }, []);
 
   useEffect(() => { //saves the palette
@@ -40,10 +57,12 @@ const SettingsScreen = () => {
     savePalette();
   }, [selectedPalette]);
 
-  const toggleOption = (option: keyof typeof accessibilityOptions) => {
+  const toggleOption = async (option: keyof AccessibilityOptions) => {
     setAccessibilityOptions((previous) => {
-      const newState = { ...previous }; //saves the previous state
-      newState[option] = !previous[option]; //new is the opposite of previous 
+      const newState = { ...previous, [option]: !previous[option] };
+      AsyncStorage.setItem("accessibilityOptions", JSON.stringify(newState)).catch((error) => { //saves it immediately
+        console.error(`Failed to save accessibilityOptions for ${option}:`, error);
+      });
       return newState;
     });
   };
