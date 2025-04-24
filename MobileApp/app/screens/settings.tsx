@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, TouchableOpacity, Switch, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const SettingsScreen = () => {
@@ -14,6 +14,31 @@ const SettingsScreen = () => {
   });
 
   const [selectedPalette, setSelectedPalette] = useState("IBM"); //current palette and a function to set it (IBM - default choice)
+
+  useEffect(() => { //it loads the palette if it's saved
+    const loadPalette = async () => {
+      try {
+        const savedPalette = await AsyncStorage.getItem("selectedPalette");
+        if (savedPalette) {
+          setSelectedPalette(savedPalette);
+        }
+      } catch (error) {
+        console.error("Failed to load palette from storage:", error);
+      }
+    };
+    loadPalette();
+  }, []);
+
+  useEffect(() => { //saves the palette
+    const savePalette = async () => {
+      try {
+        await AsyncStorage.setItem("selectedPalette", selectedPalette);
+      } catch (error) {
+        console.error("Failed to save palette to storage:", error);
+      }
+    };
+    savePalette();
+  }, [selectedPalette]);
 
   const toggleOption = (option: keyof typeof accessibilityOptions) => {
     setAccessibilityOptions((previous) => {
