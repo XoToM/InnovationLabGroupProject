@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity, FlatList, Modal, ScrollView, Button
+  View, Text, StyleSheet, TouchableOpacity, FlatList, Modal, ScrollView, Button, Image
 } from 'react-native';
 import { Link } from 'expo-router';
+
+// Hardcoded user location replceable by user inputted variable
+const USER_LOCATION = {
+  latitude: 51.3781,  // Example: Bath coordinates
+  longitude: -2.3597,
+};
 
 type Place = {
   idPlace: number;
@@ -10,33 +16,65 @@ type Place = {
   formattedAddress: string;
   latitude: number;
   longitude: number;
+  distance?: string; //distance now in class
+  photo?: string;
 };
 
-//filter types
-type FilterKey = 'wheelchairAccessibleEntrance' | 'allowsDogs' | 'ratings' | 'inductionLoop' | 'goodForChildren';
+// Filter types
+type FilterKey = 'wheelchairAccessibleEntrance' | 'wheelchairAccessibleParking' | 'wheelchairAccessibleRestroom' | 'allowsDogs' | 'ratings' | 'inductionLoop' | 'goodForChildren' | 'delivery' | 'takeout' | 'reservable' | 'acceptsNfc' | 'acceptsCashOnly';
 type Filters = Record<FilterKey, boolean>;
+
+// Distance calculation function
+function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): string {
+  const R = 6371; // Earth's radius in km
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  const distance = R * c;
+  return distance < 1 
+    ? `${Math.round(distance * 1000)}m` 
+    : `${distance.toFixed(1)}km`;
+}
 
 export default function PlacesScreen() {
   const [places, setPlaces] = useState<Place[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  //state of filter by default
+  // State of filter by default
   const [filters, setFilters] = useState<Filters>({
     wheelchairAccessibleEntrance: false,
+    wheelchairAccessibleParking: false,
+    wheelchairAccessibleRestroom: false,
     allowsDogs: false,
     ratings: false,
     inductionLoop: false,
     goodForChildren: false,
+    delivery: false,
+    takeout: false,
+    reservable: false,
+    acceptsNfc: false,
+    acceptsCashOnly: false
   });
    
-  //search key and displayed name
+  // Search key and displayed name
   const filterOptions: { key: FilterKey; label: string }[] = [
-    { key: 'wheelchairAccessibleEntrance', label: 'Wheelchair Access' },
+    { key: 'wheelchairAccessibleEntrance', label: 'Wheelchair Access Entrance' },
+    { key: 'wheelchairAccessibleParking', label: 'Wheelchair Parking' },
+    { key: 'wheelchairAccessibleRestroom', label: 'Wheelchair Access Restroom' },
     { key: 'allowsDogs', label: 'Dogs Allowed' },
     { key: 'ratings', label: 'Highly Rated' },
     { key: 'inductionLoop', label: 'Hearing Loop' },
-    { key: 'goodForChildren', label: 'Child Friendly' }
+    { key: 'goodForChildren', label: 'Child Friendly' },
+    { key: 'delivery', label: 'Has delivery'},
+    { key: 'takeout', label: 'Has takeout'},
+    { key: 'reservable', label: 'Takes Reservations'},
+    { key: 'acceptsNfc', label: 'Contactless Payment'},
+    { key: 'acceptsCashOnly', label: 'Cash Payment'}
   ];
 
   const fetchPlaces = async (appliedFilters = filters) => {
@@ -54,48 +92,92 @@ export default function PlacesScreen() {
     const queryString = activeFilters.length ? `?${activeFilters.join('&')}` : '';
     const url = `https://katestudent.pythonanywhere.com:443/places${queryString}`;
     
-    //debug console messages
+    //for debugging, outputs data into console
     try {
       setLoading(true);
-      console.log('Fetching:', url);
+      console.log('====== FETCHING DATA ======');
+      console.log('Request URL:', url);
+      console.log('Active filters:', appliedFilters);
+      console.log('Query string:', queryString);
+      
       const response = await fetch(url);
+      
+      console.log('Response status:', response.status);
+      
       if (!response.ok) {
         const errorText = await response.text();
+        console.error('Error response:', errorText);
         throw new Error(`Failed to fetch places: ${response.status} - ${errorText}`);
       }
+      
       const data = await response.json();
-      setPlaces(data.places);
+      console.log('Raw response data:', data);
+      
+      // Add distance to each place
+      const placesWithDistance = data.places.map((place: Place) => {
+        const distance = calculateDistance(
+          USER_LOCATION.latitude,
+          USER_LOCATION.longitude,
+          place.latitude,
+          place.longitude
+        );
+        
+        console.log(`Calculated distance for ${place.name}:`, distance);
+        
+        return {
+          ...place,
+          distance
+        };
+      });
+      
+      console.log('Processed places with distances:', placesWithDistance);
+      setPlaces(placesWithDistance);
+      
     } catch (err) {
-      console.error('❌ Fetch error:', err);
+      console.error('❌ FETCH ERROR:', err);
     } finally {
       setLoading(false);
+      console.log('====== FETCH COMPLETED ======');
     }
   };
 
   useEffect(() => {
+    console.log('Component mounted, fetching initial data');
     fetchPlaces();
   }, []);
 
   const toggleFilter = async (key: FilterKey) => {
+    console.log(`Toggling filter ${key} from ${filters[key]} to ${!filters[key]}`);
     const newValue = !filters[key];
     const updatedFilters = { ...filters, [key]: newValue };
     setFilters(updatedFilters);
     await fetchPlaces(updatedFilters);
   };
 
-  const toggleModal = () => setIsModalVisible(!isModalVisible);
+  const toggleModal = () => {
+    console.log(`Filter modal visibility changed to ${!isModalVisible}`);
+    setIsModalVisible(!isModalVisible);
+  };
 
   if (loading) {
+    console.log('Rendering loading state');
     return (
-      <View style={styles.container}>
+      <View style={styles.screenContainer}>
         <Text>Loading...</Text>
       </View>
     );
   }
+  //shows how many itmes fetched, helps with filter assessment
+  console.log('Rendering places list with', places.length, 'items');
 
   return (
-    <View style={styles.container}>
-      <Button title="Filter" onPress={toggleModal} />
+    <View style={styles.screenContainer}>
+      <TouchableOpacity 
+        onPress={toggleModal}
+        style={styles.filterButton}
+       >
+        <Text style={styles.filterButtonText}>Filters</Text>
+      </TouchableOpacity>
 
       <Modal
         transparent={true}
@@ -124,8 +206,10 @@ export default function PlacesScreen() {
 
       <FlatList
         data={places}
+        style={styles.listContainer}
+        contentContainerStyle={styles.listContentContainer}
         keyExtractor={(item) => item.idPlace.toString()}
-        numColumns={2}
+        numColumns={1}
         renderItem={({ item }) => (
           <Link
             href={{
@@ -135,15 +219,21 @@ export default function PlacesScreen() {
                 formattedAddress: item.formattedAddress,
                 latitude: item.latitude,
                 longitude: item.longitude,
+                image: item.photo,
               },
             }}
           >
             <TouchableOpacity style={styles.card}>
+            {item.photo && (
+              <Image 
+                source={{ uri: item.photo }} 
+                style={styles.cardImage}
+                resizeMode="cover"
+               />
+            )}
               <Text style={styles.title}>{item.name}</Text>
               <Text style={styles.subTitle}>{item.formattedAddress}</Text>
-              <Text style={styles.coordinates}>
-                {item.latitude}, {item.longitude}
-              </Text>
+              <Text style={styles.distanceText}>{item.distance} away</Text>
             </TouchableOpacity>
           </Link>
         )}
@@ -153,34 +243,116 @@ export default function PlacesScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f5f5a3', alignItems: 'center' },
+  screenContainer: { 
+    flex: 1, 
+    backgroundColor: '#f5f5a3', 
+    maxWidth: 720,
+    maxHeight: 1280 
+  },
+  listContainer: {
+    width: '100%',
+    paddingHorizontal: 15
+  },
+  listContentContainer: {
+    paddingBottom: 16,
+  },
   card: {
     backgroundColor: '#8bc34a',
-    flex: 1,
-    margin: 10,
+    width: '100%',        // Full width of FlatList container
+    marginVertical: 12,    // Space between cards
     padding: 15,
     borderRadius: 8,
-    alignItems: 'center',
   },
-  title: { fontSize: 16, fontWeight: 'bold' },
-  subTitle: { fontSize: 14, color: '#555' },
-  coordinates: { fontSize: 10, color: '#336' },
-
-  // Modal Styles
+  cardImage: {
+    width: '100%',
+    height: 150,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  title: { 
+    fontSize: 16, 
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
+  subTitle: { 
+    fontSize: 14, 
+    color: '#555',
+    textAlign: 'center'
+  },
+  distanceText: { 
+    fontSize: 12, 
+    color: '#336',
+    marginTop: 5,
+    textAlign: 'center'
+  },
+  filterButton: {
+    backgroundColor: '#284e1a', // Professional green
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    alignSelf: 'center', // Centers horizontally
+    marginTop: 16,
+    marginBottom: 8,
+    elevation: 3, // Android shadow
+    shadowColor: '#000', // iOS shadow
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+  },
+  filterButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+    letterSpacing: 0.5,
+  },
   modalOverlay: {
-    flex: 1, justifyContent: 'center', alignItems: 'center',
+    flex: 1, 
+    justifyContent: 'center', 
+    alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalBox: {
-    width: 300, maxHeight: 500,
-    padding: 20, backgroundColor: 'white', borderRadius: 10,
+    width: 400, 
+    maxHeight: 700,
+    backgroundColor: 'white',
+    borderRadius: 16,
+    padding: 24,
+    shadowColor: '#000',
+    shadowOpacity: 0.25,
+    shadowRadius: 20,
   },
   xButton: {
-    position: 'absolute', top: 10, right: 10,
-    padding: 5, backgroundColor: 'lightgray', borderRadius: 50,
+    position: 'absolute', 
+    top: 10, 
+    right: 10,
+    padding: 5, 
+    backgroundColor: 'lightgray', 
+    borderRadius: 50,
+    width: 30,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  closeText: { fontSize: 20, color: 'black' },
-  checkboxContainer: { marginTop: 20, maxHeight: 200 },
-  checkbox: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
-  checkboxText: { fontSize: 16 },
+  closeText: { 
+    fontSize: 16, 
+    color: 'black',
+    fontWeight: 'bold'
+  },
+  checkboxContainer: { 
+    marginTop: 20, 
+    maxHeight: 400, 
+  },
+  checkbox: { 
+    flexDirection: 'row', 
+    alignItems: 'flex-start', 
+    marginBottom: 10,
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e9ecef', // Light border
+  },
+  checkboxText: { 
+    fontSize: 30,
+    marginLeft: 10,
+    flexWrap: 'nowrap'
+  },
 });
