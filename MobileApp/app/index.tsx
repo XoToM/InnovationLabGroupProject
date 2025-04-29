@@ -37,29 +37,6 @@ export default function ScreensInitial() {
 				<P>{"Multiline Paragraph nr2\nIs still going strong over here"}</P>
 				<TextBtn icon="home" style={{width:"100%"}} onClick={()=>console.log("Clicked")}>Sample Text</TextBtn>
 				<Toggle label="Dark Theme Toggle" value={tog} onChange={(v:boolean)=>{setTheme(v?DarkTheme:LightTheme);togset(v)}}></Toggle>
-			{/*
-				title:{
-					color:"red"
-				},
-				h1:{
-					color:"green"
-				},
-				h2:{
-					color:"green"
-				},
-				h3:{
-					color:"green"
-				},
-				box:{},
-				button:{}
-			}}>
-				<Box style={{marginTop:"1em"}}>
-					<H1>Header 1</H1>
-					<H2>Header 2</H2>
-					<H3>Header 3</H3>
-					<Button>Button</Button>
-				</Box>
-			*/}
 		</View>
 	  </StyleContext.Provider>
 	);
