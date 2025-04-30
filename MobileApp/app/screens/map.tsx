@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Button,Image, StyleSheet,FlatList, Platform } from 'react-native';
 import Mapbox, {Camera, LocationPuck, MapView,MarkerView,StyleURL} from "@rnmapbox/maps";
 import Constants from 'expo-constants';
+import { Entypo, Ionicons } from '@expo/vector-icons';
 
 if(Constants.expoConfig?.extra?.MAPBOX_ACCESS_TOKEN){
 	Mapbox.setAccessToken(Constants.expoConfig.extra.MAPBOX_ACCESS_TOKEN);	//	insert mapbox public token here
@@ -61,8 +62,8 @@ export default function ScreenMap() {
 					
 					{
 						locations.map((loc,i)=>{
-							return	<MarkerView coordinate={[loc.pos[0], loc.pos[1]]}>
-										<Text>{loc.name}</Text>
+							return	<MarkerView coordinate={[loc.pos[0], loc.pos[1]]} anchor={{x:0.5,y:1}}>
+										<Entypo name="location-pin" size={64} color="orange" />
 									</MarkerView>;
 						})
 							
