@@ -6,6 +6,9 @@ import Mapbox, {Camera, LocationPuck, MapView,MarkerView,PointAnnotation,StyleUR
 import Constants from 'expo-constants';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 
+import * as Location from "expo-location";
+Location.requestForegroundPermissionsAsync();
+
 if(Constants.expoConfig?.extra?.MAPBOX_ACCESS_TOKEN){
 	Mapbox.setAccessToken(Constants.expoConfig.extra.MAPBOX_ACCESS_TOKEN);	//	insert mapbox public token here
 	Mapbox.setTelemetryEnabled(false);
@@ -77,10 +80,12 @@ export default function ScreenMap() {
 								</PointAnnotation>;
 						})
 					}
-					<LocationPuck puckBearing='heading' puckBearingEnabled={true} topImage='../../assets/images/icon.png'/>
+					<LocationPuck visible={true} puckBearing='heading' puckBearingEnabled={true}/>
 				</MapView>):<Text style={StyleSheet.absoluteFillObject}>No tokens provided</Text>
 			}
-			{/*<View style={[styles.mapMenu, {padding:10}]}> styleURL={StyleURL.Street}
+			{/*
+			// topImage='../../assets/images/icon.png'
+			<View style={[styles.mapMenu, {padding:10}]}> styleURL={StyleURL.Street}
 				<Text style={styles.header}>Featured</Text>
 				<FlatList horizontal={true} data={locations1} renderItem={(i)=><LocationPreview info={i.item}/>} ItemSeparatorComponent={() => <View style={{height:1,width: 10}} />}/>
 				<Text style={styles.header}>Featured</Text>
