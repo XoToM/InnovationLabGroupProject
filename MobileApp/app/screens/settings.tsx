@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Switch, StyleSheet } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Switch, StyleSheet,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useTheme } from "../../context/ThemeContext";
+import { useRouter } from 'expo-router';
+
+const router = useRouter();
+{/* коментар */}
 
 type AccessibilityOptions = {
   "Wheelchair user": boolean;
@@ -9,25 +15,19 @@ type AccessibilityOptions = {
   "Social anxiety": boolean;
 };
 
+const defaultAccessibilityOptions: AccessibilityOptions = {
+  "Wheelchair user": false,
+  "Guide dog owner": false,
+  "Social anxiety": false,
+};
+
 const SettingsScreen = () => {
-  {/* коментар */}
-  const defaultAccessibilityOptions: AccessibilityOptions = {
-    "Wheelchair user": false,
-    "Guide dog owner": false,
-    "Social anxiety": false,
-  };
   const [accessibilityOptions, setAccessibilityOptions] = useState<AccessibilityOptions>(defaultAccessibilityOptions);
+  const { theme, paletteName, setPalette } = useTheme();
 
-  const [selectedPalette, setSelectedPalette] = useState("IBM"); //current palette and a function to set it (IBM - default choice)
-
-  useEffect(() => { 
-    const loadSettings = async () => { //it loads the settings if they're saved
+  useEffect(() => {
+    const loadSettings = async () => {
       try {
-        const savedPalette = await AsyncStorage.getItem("selectedPalette");
-        if (savedPalette) {
-          setSelectedPalette(savedPalette);
-        }
-
         const savedOptions = await AsyncStorage.getItem("accessibilityOptions");
         if (savedOptions) {
           const parsedOptions = JSON.parse(savedOptions);
@@ -40,70 +40,69 @@ const SettingsScreen = () => {
           setAccessibilityOptions(validOptions);
         }
       } catch (error) {
-        console.error("Failed to load settings from storage:", error);
+        console.error("Failed to load settings:", error);
       }
     };
+
     loadSettings();
   }, []);
 
-  useEffect(() => { //saves the palette
-    const savePalette = async () => {
-      try {
-        await AsyncStorage.setItem("selectedPalette", selectedPalette);
-      } catch (error) {
-        console.error("Failed to save palette to storage:", error);
-      }
-    };
-    savePalette();
-  }, [selectedPalette]);
-
   const toggleOption = async (option: keyof AccessibilityOptions) => {
-    setAccessibilityOptions((previous) => {
-      const newState = { ...previous, [option]: !previous[option] };
-      AsyncStorage.setItem("accessibilityOptions", JSON.stringify(newState)).catch((error) => { //saves it immediately
-        console.error(`Failed to save accessibilityOptions for ${option}:`, error);
+    setAccessibilityOptions((prev) => {
+      const updated = { ...prev, [option]: !prev[option] };
+      AsyncStorage.setItem("accessibilityOptions", JSON.stringify(updated)).catch((error) => {
+        console.error(`Failed to save accessibilityOptions:`, error);
       });
-      return newState;
+      return updated;
     });
   };
 
   return (
-    <ScrollView style={styles.container}> {/* the whole screen is scrollable */}
-      <View style={styles.header}> {/* header */}
-        <TouchableOpacity style={styles.settingIcon}> {/* button with an icon. later should be linked to other pages */}
-          <Ionicons name="home" size={28} />
+    <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.settingIcon} onPress={() => router.push('/screens/map')}>
+          <Ionicons name="home" size={28} color={theme.text} />
         </TouchableOpacity>
-        <Text style={styles.headerText}>Settings</Text>
-        <TouchableOpacity style={styles.settingIcon}>
-          <Ionicons name="close" size={28} />
+        <Text style={[styles.headerText, { color: theme.text }]}>Settings</Text>
+        <TouchableOpacity style={styles.settingIcon} onPress={() => router.push('/screens/filter-places')}>
+          <Ionicons name="close" size={28} color={theme.text} />
         </TouchableOpacity>
       </View>
 
-      <View style={styles.section}> {/* view for first options regarding accessabilities */}
+      {/* Accessibility Options */}
+      <View style={styles.section}>
         <TouchableOpacity style={styles.settingIcon}>
-          <Ionicons name="filter" size={24} /> {/* another icon */}
+          <Ionicons name="accessibility" size={24} color={theme.text} />
         </TouchableOpacity>
-        <View style={styles.optionsContainer}>
-          {Object.entries(accessibilityOptions).map(([key, value]) => ( /* this runs through every accessibility option */
-            <View key={key} style={styles.optionRow}> {/* creates switch for every option */}
-              <Switch value={value} onValueChange={() => toggleOption(key as keyof typeof accessibilityOptions)} />
-              <Text style = {styles.sectionText}>{key}</Text> 
+        <View style={[styles.optionsContainer, { backgroundColor: theme.card }]}>
+          {Object.entries(accessibilityOptions).map(([key, value]) => (
+            <View key={key} style={styles.optionRow}>
+              <Switch value={value} onValueChange={() => toggleOption(key as keyof AccessibilityOptions)} />
+              <Text style={[styles.sectionText, { color: theme.text }]}>{key}</Text>
             </View>
           ))}
         </View>
       </View>
 
+      {/* Color Palette Selector */}
       <View style={styles.section}>
         <TouchableOpacity style={styles.settingIcon}>
-          <Ionicons name="color-palette" size={24} />
+          <Ionicons name="color-palette" size={24} color={theme.text} />
         </TouchableOpacity>
-        <View style={styles.optionsContainer}>
-          {["Tol", "IBM"].map((palette) => ( /* out of two options listed run through them */
-            <TouchableOpacity key={palette} style={styles.optionRow} onPress={() => setSelectedPalette(palette)}>
-              <Switch value={selectedPalette === palette} onValueChange={() => setSelectedPalette(palette)} />
-              <Text style = {styles.sectionText}>{palette} color palette</Text>
-            </TouchableOpacity> //!!!in future it will use Async storage to save chosen settings!!!
-          ))}
+        <View style={[styles.optionsContainer, { backgroundColor: theme.card }]}>
+        {(["IBM", "Tol"] as const).map((palette) => (
+          <TouchableOpacity
+            key={palette}
+            style={styles.optionRow}
+            onPress={() => setPalette(palette)}
+          >
+            <Switch
+              value={paletteName === palette}
+              onValueChange={() => setPalette(palette)}
+            />
+            <Text style={[styles.sectionText, { color: theme.text }]}>{palette} color palette</Text>
+          </TouchableOpacity>
+        ))}
         </View>
       </View>
     </ScrollView>
@@ -114,7 +113,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    backgroundColor: "white",
   },
   header: {
     flexDirection: "row",
@@ -127,18 +125,19 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   section: {
-    marginBottom: 5,
+    marginBottom: 10,
     padding: 20,
     width: "90%",
+    alignSelf: "center",
   },
   sectionText: {
     marginLeft: 10,
+    fontSize: 16,
   },
   settingIcon: {
     margin: 10,
   },
   optionsContainer: {
-    backgroundColor: "#f0f0f0",
     padding: 10,
     borderRadius: 10,
   },
