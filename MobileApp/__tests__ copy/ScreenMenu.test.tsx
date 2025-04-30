@@ -2,8 +2,11 @@ import React from "react";
 import { render } from "@testing-library/react-native";
 import ScreensMenu from "../app/screens/menu";
 
-// Mock the expo-router's Link component
 jest.mock("expo-router", () => ({
+  useRouter: () => ({
+    push: jest.fn(),
+    replace: jest.fn(),
+  }),
   Link: ({ children }: any) => <>{children}</>,
 }));
 
@@ -20,13 +23,13 @@ describe("ScreensMenu", () => {
 
   it("renders the SignUP button", () => {
     const { getByText } = render(<ScreensMenu />);
-    expect(getByText("SignUP")).toBeTruthy();
+    expect(getByText("Signup")).toBeTruthy();
   });
 
   it("contains buttons wrapped in Link", () => {
     const { getByText } = render(<ScreensMenu />);
     expect(getByText("Login")).toBeTruthy();
-    expect(getByText("SignUP")).toBeTruthy();
+    expect(getByText("Signup")).toBeTruthy();
   });
 
   it("matches the snapshot", () => {

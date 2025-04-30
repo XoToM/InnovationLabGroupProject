@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PlacesScreen matches snapshot after data load 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "backgroundColor": "#f5f5a3",
+      "flex": 1,
+    }
+  }
+>
+  <Text>
+    Loading...
+  </Text>
+</View>
+`;

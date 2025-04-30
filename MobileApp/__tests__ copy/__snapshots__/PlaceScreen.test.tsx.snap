@@ -1,0 +1,398 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PlaceScreen matches snapshot 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "backgroundColor": "#f5f5a3",
+      "flex": 1,
+    }
+  }
+>
+  <View
+    style={
+      {
+        "alignItems": "center",
+        "backgroundColor": "#8BC34A",
+        "flexDirection": "row",
+        "justifyContent": "space-between",
+        "padding": 15,
+        "width": "100%",
+      }
+    }
+  >
+    <Image
+      source="test-file-stub"
+      style={
+        {
+          "height": 40,
+          "width": 40,
+        }
+      }
+    />
+    <Text
+      style={
+        {
+          "color": "#333",
+          "fontSize": 20,
+          "fontWeight": "bold",
+        }
+      }
+    >
+      EquiMap
+    </Text>
+    <View
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        {
+          "opacity": 1,
+          "padding": 10,
+        }
+      }
+    >
+      <Text
+        style={
+          {
+            "fontSize": 24,
+            "fontWeight": "bold",
+          }
+        }
+      >
+        ☰
+      </Text>
+    </View>
+  </View>
+  <Text
+    style={
+      {
+        "backgroundColor": "#c5da8c",
+        "fontSize": 24,
+        "fontWeight": "bold",
+        "padding": 10,
+        "textAlign": "center",
+        "width": "100%",
+      }
+    }
+  >
+    Test Place
+  </Text>
+  <Image
+    source="test-file-stub"
+    style={
+      [
+        {
+          "borderRadius": 10,
+          "height": 200,
+          "marginVertical": 10,
+          "width": "90%",
+        },
+        {
+          "resizeMode": "stretch",
+        },
+      ]
+    }
+  />
+  <View
+    style={
+      {
+        "flexDirection": "row",
+        "gap": 15,
+        "marginBottom": 10,
+      }
+    }
+  >
+    <View
+      style={
+        {
+          "alignItems": "center",
+        }
+      }
+    >
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          {
+            "backgroundColor": "#f8f8f8",
+            "borderRadius": 50,
+            "elevation": 3,
+            "opacity": 1,
+            "padding": 15,
+          }
+        }
+      >
+        <Text
+          style={
+            {
+              "fontSize": 20,
+            }
+          }
+        >
+          ♿
+        </Text>
+      </View>
+    </View>
+    <View
+      style={
+        {
+          "alignItems": "center",
+        }
+      }
+    >
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          {
+            "backgroundColor": "#f8f8f8",
+            "borderRadius": 50,
+            "elevation": 3,
+            "opacity": 1,
+            "padding": 15,
+          }
+        }
+      >
+        <Text
+          style={
+            {
+              "fontSize": 20,
+            }
+          }
+        >
+          🏳️‍🌈
+        </Text>
+      </View>
+    </View>
+    <View
+      style={
+        {
+          "alignItems": "center",
+        }
+      }
+    >
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          {
+            "backgroundColor": "#f8f8f8",
+            "borderRadius": 50,
+            "elevation": 3,
+            "opacity": 1,
+            "padding": 15,
+          }
+        }
+      >
+        <Text
+          style={
+            {
+              "fontSize": 20,
+            }
+          }
+        >
+          🔍
+        </Text>
+      </View>
+    </View>
+    <View
+      style={
+        {
+          "alignItems": "center",
+        }
+      }
+    >
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          {
+            "backgroundColor": "#f8f8f8",
+            "borderRadius": 50,
+            "elevation": 3,
+            "opacity": 1,
+            "padding": 15,
+          }
+        }
+      >
+        <Text
+          style={
+            {
+              "fontSize": 20,
+            }
+          }
+        >
+          🍽️
+        </Text>
+      </View>
+    </View>
+  </View>
+  <View
+    style={
+      {
+        "flexDirection": "row",
+        "justifyContent": "space-between",
+        "marginVertical": 10,
+        "width": "90%",
+      }
+    }
+  >
+    <Text
+      style={
+        {
+          "fontSize": 18,
+        }
+      }
+    >
+      ⭐⭐⭐⭐☆
+    </Text>
+    <Text
+      style={
+        {
+          "fontSize": 18,
+          "fontWeight": "bold",
+        }
+      }
+    >
+      ££
+    </Text>
+  </View>
+  <Text
+    style={
+      {
+        "fontSize": 14,
+        "padding": 15,
+        "textAlign": "center",
+      }
+    }
+  >
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+  </Text>
+</View>
+`;
