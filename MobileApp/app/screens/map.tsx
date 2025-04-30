@@ -60,7 +60,7 @@ export default function ScreenMap() {
 	return (
 		<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 			{Constants.expoConfig?.extra?.MAPBOX_ACCESS_TOKEN?(
-				<MapView style={StyleSheet.absoluteFillObject}>
+				<MapView style={StyleSheet.absoluteFillObject} compassEnabled={true}>
 					
 					<Camera defaultSettings={{ centerCoordinate: [0,0], zoomLevel: 9 }}/>
 					
