@@ -20,6 +20,6 @@ export function Toggle({label, onChange, value}:any){
 	let style_ctx = useContext(StyleContext);
 	return <View style={[BaseTheme.toggleContainer, style_ctx.toggleContainer]}>
 		<Switch accessible={true} accessibilityLabel={label} style={[BaseTheme.toggle, style_ctx.toggle]} value={value} onValueChange={onChange}/>
-		<Text style={[BaseTheme.toggleLabel, style_ctx.toggleLabel]}>{label}</Text>
-	</View>;
+			<Text style={[BaseTheme.toggleLabel, style_ctx.toggleLabel]}>{label}</Text>
+		</View>;
 }
