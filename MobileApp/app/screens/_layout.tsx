@@ -6,10 +6,10 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { ThemeProvider } from "../../context/ThemeContext";
 import { AuthProvider } from '../../constants/auth-context';
-import { useColorScheme } from '@/hooks/useColorScheme';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
