@@ -12,13 +12,40 @@ const USER_LOCATION = {
 };
 
 type Place = {
+  distance: number;
+  longitude: number;
+  latitude: number;
   idPlace: number;
   name: string;
   formattedAddress: string;
-  latitude: number;
-  longitude: number;
-  distance?: string; //distance now in class
-  photo?: string;
+  photo: string;
+  wheelchairAccessibleParking: number;
+  wheelchairAccessibleEntrance: number;
+  wheelchairAccessibleRestroom: number;
+  wheelchairAccessDescription: number;
+  description: string;
+  rating: number;
+  priceLevel: number;
+  nationalPhoneNumber: string;
+  regularOpeningHours: string;
+  delivery: number;
+  takeout: number;
+  dineIn: number;
+  outdoorSeating: number;
+  liveMusic: number;
+  allowsDogs: number;
+  goodForChildren: number;
+  goodForGroups: number;
+  goodForWatchingSports: number;
+  restroom: number;
+  reservable: number;
+  curbsidePickup: number;
+  menuForChildren: number;
+  acceptsCreditCards: number;
+  acceptsDebitCards: number;
+  acceptsCashOnly: number;
+  acceptsNfc: number;
+  
 };
 
 // Filter types
