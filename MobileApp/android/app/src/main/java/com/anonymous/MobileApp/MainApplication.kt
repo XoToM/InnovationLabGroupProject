@@ -1,4 +1,4 @@
-package com.anonymous.equimap
+package com.anonymous.MobileApp
 
 import android.app.Application
 import android.content.res.Configuration

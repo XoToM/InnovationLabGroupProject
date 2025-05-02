@@ -1,76 +1,339 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+"use client";
 
-// Define navigation types
+import { useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Alert,
+} from "react-native";
+import { Input, Button } from "@rneui/themed";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useAuth } from "../../constants/auth-context";
+import { colors, commonStyles } from "../../constants/common";
+import { Feather, AntDesign } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
+import { Link } from "expo-router";
+import { useEffect } from "react";
+
 type RootStackParamList = {
-  Home: undefined;
+  Login: undefined;
   Signup: undefined;
+  Home: undefined;
 };
 
-type Props = NativeStackScreenProps<RootStackParamList, "Signup">;
+type SignupScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  "Signup"
+>;
 
-const Signup: React.FC<Props> = ({ navigation }) => {
-  const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
+export default function SignupScreen() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const { signUp, loading: contextLoading } = useAuth();
+  const [localLoading, setLocalLoading] = useState(false);
+  const loading = contextLoading ?? localLoading;
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const navigation = useNavigation<SignupScreenNavigationProp>();
+  useEffect(() => {
+    navigation.setOptions({ headerShown: false });
+  }, [navigation]);
 
-  const handleSignup = () => {
-    if (!name || !email || !password || !confirmPassword) {
-      alert("Please fill in all fields.");
-      return;
-    }
-    if (password !== confirmPassword) {
-      alert("Passwords do not match.");
-      return;
-    }
-    console.log("Signing up with:", name, email, password);
+  const validateName = (name: string) => {
+    if (!name) return "Name is required";
+    if (/\d/.test(name)) return "Name must not contain numbers";
+    if (name.length < 2) return "Name must be at least 2 characters";
+    return "";
   };
 
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) return "Email is required";
+    if (!emailRegex.test(email)) return "Please enter a valid email";
+    return "";
+  };
+
+  const validatePassword = (password: string) => {
+    if (!password) return "Password is required";
+    if (password.length < 6) return "Password must be at least 6 characters";
+    return "";
+  };
+
+  const validateConfirmPassword = (confirmPassword: string) => {
+    if (!confirmPassword) return "Please confirm your password";
+    if (confirmPassword !== password) return "Passwords do not match";
+    return "";
+  };
+
+  const validateForm = () => {
+    const nameError = validateName(name);
+    const emailError = validateEmail(email);
+    const passwordError = validatePassword(password);
+    const confirmPasswordError = validateConfirmPassword(confirmPassword);
+
+    setErrors({
+      name: nameError,
+      email: emailError,
+      password: passwordError,
+      confirmPassword: confirmPasswordError,
+    });
+
+    return !nameError && !emailError && !passwordError && !confirmPasswordError;
+  };
+
+  async function handleSignup() {
+    if (!validateForm()) return;
+
+    setLocalLoading(true);
+
+    try {
+      const { error } = await signUp(name, email, password);
+
+      if (error) {
+        Alert.alert("Error", error);
+      } else {
+        Alert.alert("Success", "Account created successfully! Please sign in.");
+        navigation.navigate("Login");
+      }
+    } catch (error) {
+      Alert.alert("Error", "An unexpected error occurred");
+      console.error(error);
+    } finally {
+      setLocalLoading(false);
+    }
+  }
+
   return (
-    <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-          <Ionicons name="home" size={30} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Sign-Up</Text>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="close" size={30} color="black" />
-        </TouchableOpacity>
-      </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={commonStyles.container}
+    >
+      <ScrollView contentContainerStyle={commonStyles.scrollContainer}>
+        <View style={commonStyles.logoContainer}>
+          <LinearGradient
+            colors={colors.gradient}
+            style={commonStyles.logoCircle}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+          >
+            <Text style={{ color: "white", fontSize: 40, fontWeight: "bold" }}>
+              A
+            </Text>
+          </LinearGradient>
+          <Text style={commonStyles.logoText}>EquiMap</Text>
+        </View>
 
-      {/* Title */}
-      <Text style={styles.welcomeText}>
-        Create Your <Text style={styles.brandText}>EquiMap</Text> Account
-      </Text>
+        <Text style={commonStyles.title}>Create Account</Text>
+        <Text style={commonStyles.subtitle}>
+          Sign up to get started with all our features
+        </Text>
 
-      {/* Input Fields */}
-      <TextInput style={styles.input} placeholder="Name" value={name} onChangeText={setName} />
-      <TextInput style={styles.input} placeholder="Email" keyboardType="email-address" value={email} onChangeText={setEmail} />
-      <TextInput style={styles.input} placeholder="Password" secureTextEntry value={password} onChangeText={setPassword} />
-      <TextInput style={styles.input} placeholder="Confirm Password" secureTextEntry value={confirmPassword} onChangeText={setConfirmPassword} />
+        <View style={commonStyles.formContainer}>
+          <Input
+            placeholder="Full Name"
+            leftIcon={
+              <View style={commonStyles.iconContainer}>
+                <Feather name="user" size={20} color={colors.textLight} />
+              </View>
+            }
+            onChangeText={(text) => {
+              setName(text);
+              if (errors.name) setErrors({ ...errors, name: "" });
+            }}
+            value={name}
+            autoCapitalize="words"
+            containerStyle={[
+              commonStyles.inputContainer,
+              errors.name ? commonStyles.inputContainerError : null,
+            ]}
+            inputContainerStyle={{ borderBottomWidth: 0 }}
+            inputStyle={commonStyles.inputStyle}
+            onBlur={() => setErrors({ ...errors, name: validateName(name) })}
+          />
+          {errors.name ? (
+            <Text style={commonStyles.errorText}>{errors.name}</Text>
+          ) : null}
 
-      {/* Signup Button */}
-      <TouchableOpacity style={styles.button} onPress={handleSignup}>
-        <Text style={styles.buttonText}>Sign up</Text>
-      </TouchableOpacity>
-    </View>
+          <Input
+            placeholder="Email"
+            leftIcon={
+              <View style={commonStyles.iconContainer}>
+                <Feather name="mail" size={20} color={colors.textLight} />
+              </View>
+            }
+            onChangeText={(text) => {
+              setEmail(text);
+              if (errors.email) setErrors({ ...errors, email: "" });
+            }}
+            value={email}
+            autoCapitalize="none"
+            keyboardType="email-address"
+            containerStyle={[
+              commonStyles.inputContainer,
+              errors.email ? commonStyles.inputContainerError : null,
+            ]}
+            inputContainerStyle={{ borderBottomWidth: 0 }}
+            inputStyle={commonStyles.inputStyle}
+            onBlur={() => setErrors({ ...errors, email: validateEmail(email) })}
+          />
+          {errors.email ? (
+            <Text style={commonStyles.errorText}>{errors.email}</Text>
+          ) : null}
+
+          <Input
+            placeholder="Password"
+            leftIcon={
+              <View style={commonStyles.iconContainer}>
+                <Feather name="lock" size={20} color={colors.textLight} />
+              </View>
+            }
+            rightIcon={
+              <TouchableOpacity
+                onPress={() => setShowPassword(!showPassword)}
+                testID="password-visibility-toggle"
+              >
+                <Feather
+                  name={showPassword ? "eye-off" : "eye"}
+                  size={20}
+                  color={colors.textLight}
+                />
+              </TouchableOpacity>
+            }
+            onChangeText={(text) => {
+              setPassword(text);
+              if (errors.password) setErrors({ ...errors, password: "" });
+            }}
+            value={password}
+            secureTextEntry={!showPassword}
+            autoCapitalize="none"
+            containerStyle={[
+              commonStyles.inputContainer,
+              errors.password ? commonStyles.inputContainerError : null,
+            ]}
+            inputContainerStyle={{ borderBottomWidth: 0 }}
+            inputStyle={commonStyles.inputStyle}
+            onBlur={() =>
+              setErrors({ ...errors, password: validatePassword(password) })
+            }
+          />
+          {errors.password ? (
+            <Text style={commonStyles.errorText}>{errors.password}</Text>
+          ) : null}
+
+          <Input
+            placeholder="Confirm Password"
+            leftIcon={
+              <View style={commonStyles.iconContainer}>
+                <Feather name="lock" size={20} color={colors.textLight} />
+              </View>
+            }
+            rightIcon={
+              <TouchableOpacity
+                onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                <Feather
+                  name={showConfirmPassword ? "eye-off" : "eye"}
+                  size={20}
+                  color={colors.textLight}
+                />
+              </TouchableOpacity>
+            }
+            onChangeText={(text) => {
+              setConfirmPassword(text);
+              if (errors.confirmPassword)
+                setErrors({ ...errors, confirmPassword: "" });
+            }}
+            value={confirmPassword}
+            secureTextEntry={!showConfirmPassword}
+            autoCapitalize="none"
+            containerStyle={[
+              commonStyles.inputContainer,
+              errors.confirmPassword ? commonStyles.inputContainerError : null,
+            ]}
+            inputContainerStyle={{ borderBottomWidth: 0 }}
+            inputStyle={commonStyles.inputStyle}
+            onBlur={() =>
+              setErrors({
+                ...errors,
+                confirmPassword: validateConfirmPassword(confirmPassword),
+              })
+            }
+          />
+          {errors.confirmPassword ? (
+            <Text style={commonStyles.errorText}>{errors.confirmPassword}</Text>
+          ) : null}
+
+          <Button
+            title="Create Account"
+            testID="signup-submit-btn"
+            onPress={handleSignup}
+            disabled={loading}
+            accessibilityState={{ disabled: loading }}
+            loading={loading}
+            loadingProps={{ color: "white", size: "small" }}
+            buttonStyle={commonStyles.button}
+            titleStyle={commonStyles.buttonTitle}
+            disabledStyle={{ backgroundColor: colors.primary + "80" }}
+            ViewComponent={LinearGradient}
+            linearGradientProps={{
+              colors: colors.gradient,
+              start: { x: 0, y: 0 },
+              end: { x: 1, y: 0 },
+            }}
+          />
+
+          <View style={commonStyles.dividerContainer}>
+            <View style={commonStyles.divider} />
+            <Text style={commonStyles.dividerText}>OR</Text>
+            <View style={commonStyles.divider} />
+          </View>
+
+          <View style={commonStyles.socialButtonsContainer}>
+            <Button
+              title="Sign up with Google"
+              icon={
+                <View style={commonStyles.iconContainer}>
+                  <AntDesign name="google" size={22} color="#DB4437" />
+                </View>
+              }
+              buttonStyle={commonStyles.socialButton}
+              titleStyle={commonStyles.socialButtonTitle}
+            />
+            <Button
+              title="Sign up with Apple"
+              icon={
+                <View style={commonStyles.iconContainer}>
+                  <AntDesign name="apple1" size={22} color="black" />
+                </View>
+              }
+              buttonStyle={commonStyles.socialButton}
+              titleStyle={commonStyles.socialButtonTitle}
+            />
+          </View>
+
+          <View style={commonStyles.footerContainer}>
+            <Text style={commonStyles.footerText}>
+              Already have an account?{" "}
+            </Text>
+            <Link href="/screens/login">
+              <Text style={commonStyles.footerLink}>Sign Up</Text>
+            </Link>
+          </View>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
-};
-
-// Styles
-const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center", padding: 20 },
-  header: { flexDirection: "row", width: "100%", justifyContent: "space-between", alignItems: "center", marginBottom: 20 },
-  headerText: { fontSize: 20, fontWeight: "bold" },
-  welcomeText: { fontSize: 18, fontWeight: "bold", marginBottom: 20 },
-  brandText: { color: "#005f73", fontWeight: "bold" },
-  input: { width: "100%", padding: 10, borderWidth: 1, borderRadius: 5, marginBottom: 10, backgroundColor: "#f0f0f0" },
-  button: { backgroundColor: "#005f73", padding: 10, borderRadius: 5, alignItems: "center", width: "100%" },
-  buttonText: { color: "white", fontWeight: "bold" },
-});
-
-export default Signup;
+}

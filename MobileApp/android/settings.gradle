@@ -21,7 +21,7 @@ extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
   }
 }
 
-rootProject.name = 'equimap'
+rootProject.name = 'MobileApp'
 
 dependencyResolutionManagement {
   versionCatalogs {

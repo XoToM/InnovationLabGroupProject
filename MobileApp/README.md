@@ -1,38 +1,47 @@
 ## Get started
-1. Install Node
-   [Download it here](https://nodejs.org/en/download)
+1. Install Node and Android Studio
+   
+   [Download Node here](https://nodejs.org/en/download)
+   
+   [Download Android Studio](https://developer.android.com/studio)
 
-2. Install dependencies
+   Android studio is required to compile the app for android.
 
-   ```bash
-   npm install
-   ```
+2. Insert the .env file into this folder to add in the api tokens.
 
-3. Start the app
+3. Install dependencies
 
-   ```bash
-    npx expo start
-   ```
+      ```bash
+         npm install
+      ```
 
-   if you cannot connect to the app (or you are using uni wifi) you may want to use the following command instead:
-   ```
-    npx expo start --tunnel
-   ```
+4. Plug in your android phone to your computer, and enable USB debugging. To enable USB debugging on your phone go to your phone's settings, open developer settings (hidden by default. Clicking several times on the Build Number in the settings shows this menu) and enable USB debugging.
 
-4. Go to the Visual Studio press CTRL+Shift+P (Or ⌘+Shift+P on Mac).
+      If you do not have an Android device, you can use an Android Emulator to run the code. You can install it with the link below. The steps to running the app with the emulator are the same as for running it with a real phone, you just need to make sure the emulator is installed.
 
-Choose "TypeScript: Select a TypeScript Version...".
+      [Android emulator setup](https://docs.expo.dev/workflow/android-studio-emulator/)
 
-Choose "Use workspace Version" .
+5. If you are having problems with the app directly after pulling from a branch you may need to rebuild from scratch. Run the following command:
 
-In the output, you'll find options to open the app in a
+      ```bash
+         npx expo prebuild --clean
+      ```
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+6. Start the app
 
+      ```bash
+         npx expo run:android
+      ```
 
+7. Go to the Visual Studio press CTRL+Shift+P (Or ⌘+Shift+P on Mac).
 
+   Choose "TypeScript: Select a TypeScript Version...".
+
+   Choose "Use workspace Version" .
+
+# More info
+
+[development build info](https://docs.expo.dev/develop/development-builds/introduction/)
 This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
 

@@ -1,52 +1,36 @@
+
 import { Link } from 'expo-router';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text, Button } from 'react-native';
+import { StyleSheet } from 'react-native';
+
 
 export default function ScreensMenu() {
-  return (
-    <View style={styles.container}>
-      {/* Settings cog icon in top right */}
-      <Link href="/screens/settings" style={styles.settingsButton}>
-        <TouchableOpacity>
-          <Ionicons name="settings" size={60} color="#284e1a" />
-        </TouchableOpacity>
-      </Link>
-
-      {/* Vertical button list */}
-      <View style={styles.buttonContainer}>
-        <Link href="/screens/login" style={styles.link}>
-          <View style={styles.button}>
-            <Text style={styles.buttonText}>Login</Text>
-          </View>
-        </Link>
-        <Link href="/screens/signup" style={styles.link}>
-          <View style={styles.button}>
-            <Text style={styles.buttonText}>Signup</Text>
-          </View>
-        </Link>
-        <Link href="/screens/map" style={styles.link}>
-          <View style={styles.button}>
-            <Text style={styles.buttonText}>Map</Text>
-          </View>
-        </Link>
-        <Link href="/screens/place" style={styles.link}>
-          <View style={styles.button}>
-            <Text style={styles.buttonText}>Place</Text>
-          </View>
-        </Link>
-        <Link href="/screens/filter-places" style={styles.link}>
-          <View style={styles.button}>
-            <Text style={styles.buttonText}>Filter</Text>
-          </View>
-        </Link>
-        <Link href="/screens/places" style={styles.link}>
-          <View style={styles.button}>
-            <Text style={styles.buttonText}>Places</Text>
-          </View>
-        </Link>
-      </View>
-    </View>
-  );
+	return (
+		<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+			<Text>Screens Menu</Text>
+			<Link href="/screens/login">
+				<Button title="Login" />
+			</Link>
+			<Link href="/screens/signup">
+				<Button title="Signup" />
+			</Link>
+			<Link href="/screens/map">
+				<Button title="Map" />
+			</Link>
+			<Link href="/screens/place">
+				<Button title="Place" />
+			</Link>
+			<Link href="/screens/settings">
+				<Button title="Settings" />
+			</Link>
+			<Link href="/screens/filter">
+				<Button title="Filter" />
+			</Link>
+			<Link href="/screens/places">
+				<Button title="Places" />
+			</Link>
+		</View>
+	);
 }
 
 const styles = StyleSheet.create({

@@ -1,86 +1,247 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+"use client";
 
-// Define navigation types
+import { useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Alert,
+} from "react-native";
+import { Input, Button } from "@rneui/themed";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useAuth } from "../../constants/auth-context";
+import { colors, commonStyles } from "../../constants/common";
+import { Feather, AntDesign } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
+import { Link } from "expo-router";
+import { useEffect } from "react";
+
 type RootStackParamList = {
-  Home: undefined;
   Login: undefined;
+  Signup: undefined;
+  Home: undefined;
 };
 
-type Props = NativeStackScreenProps<RootStackParamList, "Login">;
+type LoginScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  "Login"
+>;
 
-const Login: React.FC<Props> = ({ navigation }) => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+export default function LoginScreen() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
-    if (!email || !password) {
-      alert("Please enter email and password.");
-      return;
-    }
-    console.log("Logging in with:", email, password);
+  const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  });
+  const navigation = useNavigation<LoginScreenNavigationProp>();
+  useEffect(() => {
+    navigation.setOptions({ headerShown: false });
+  }, [navigation]);
+  const { signIn } = useAuth();
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) return "Email is required";
+    if (!emailRegex.test(email)) return "Please enter a valid email";
+    return "";
   };
 
+  const validatePassword = (password: string) => {
+    if (!password) return "Password is required";
+    if (password.length < 6) return "Password must be at least 6 characters";
+    return "";
+  };
+
+  const validateForm = () => {
+    const emailError = validateEmail(email);
+    const passwordError = validatePassword(password);
+
+    setErrors({
+      email: emailError,
+      password: passwordError,
+    });
+
+    return !emailError && !passwordError;
+  };
+
+  async function handleLogin() {
+    if (!validateForm()) return;
+
+    setLoading(true);
+
+    try {
+      const { error } = await signIn(email, password);
+
+      if (error) {
+        Alert.alert("Error", error);
+      } else {
+        console.log("Login success! Navigating...");
+        navigation.navigate("Home");
+      }
+    } catch (error) {
+      Alert.alert("Error", "An unexpected error occurred");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
-    <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-          <Ionicons name="home" size={30} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Log In</Text>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="close" size={30} color="black" />
-        </TouchableOpacity>
-      </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={commonStyles.container}
+    >
+      <ScrollView contentContainerStyle={commonStyles.scrollContainer}>
+        <View style={commonStyles.logoContainer}>
+          <LinearGradient
+            colors={colors.gradient}
+            style={commonStyles.logoCircle}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+          >
+            <Text style={{ color: "white", fontSize: 40, fontWeight: "bold" }}>
+              A
+            </Text>
+          </LinearGradient>
+          <Text style={commonStyles.logoText}>EquiMap</Text>
+        </View>
 
-      {/* Title */}
-      <Text style={styles.welcomeText}>
-        Welcome Back to <Text style={styles.brandText}>EquiMap</Text>
-      </Text>
+        <Text style={commonStyles.title}>Welcome Back</Text>
+        <Text style={commonStyles.subtitle}>
+          Sign in to your account to continue
+        </Text>
 
-      {/* Input Fields */}
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        keyboardType="email-address"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
+        <View style={commonStyles.formContainer}>
+          <Input
+            placeholder="Email"
+            leftIcon={
+              <View style={commonStyles.iconContainer}>
+                <Feather name="mail" size={20} color={colors.textLight} />
+              </View>
+            }
+            onChangeText={(text) => {
+              setEmail(text);
+              if (errors.email) setErrors({ ...errors, email: "" });
+            }}
+            value={email}
+            autoCapitalize="none"
+            keyboardType="email-address"
+            containerStyle={[
+              commonStyles.inputContainer,
+              errors.email ? commonStyles.inputContainerError : null,
+            ]}
+            inputContainerStyle={{ borderBottomWidth: 0 }}
+            inputStyle={commonStyles.inputStyle}
+            onBlur={() => setErrors({ ...errors, email: validateEmail(email) })}
+          />
+          {errors.email ? (
+            <Text style={commonStyles.errorText}>{errors.email}</Text>
+          ) : null}
 
-      {/* Login Button */}
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Log in</Text>
-      </TouchableOpacity>
+          <Input
+            placeholder="Password"
+            leftIcon={
+              <View style={commonStyles.iconContainer}>
+                <Feather name="lock" size={20} color={colors.textLight} />
+              </View>
+            }
+            rightIcon={
+              <TouchableOpacity
+                onPress={() => setShowPassword(!showPassword)}
+                testID="password-visibility-toggle"
+              >
+                <Feather
+                  name={showPassword ? "eye-off" : "eye"}
+                  size={20}
+                  color={colors.textLight}
+                />
+              </TouchableOpacity>
+            }
+            onChangeText={(text) => {
+              setPassword(text);
+              if (errors.password) setErrors({ ...errors, password: "" });
+            }}
+            value={password}
+            secureTextEntry={!showPassword}
+            autoCapitalize="none"
+            containerStyle={[
+              commonStyles.inputContainer,
+              errors.password ? commonStyles.inputContainerError : null,
+            ]}
+            inputContainerStyle={{ borderBottomWidth: 0 }}
+            inputStyle={commonStyles.inputStyle}
+            onBlur={() =>
+              setErrors({ ...errors, password: validatePassword(password) })
+            }
+          />
+          {errors.password ? (
+            <Text style={commonStyles.errorText}>{errors.password}</Text>
+          ) : null}
 
-      {/* Forgot Password */}
-      <TouchableOpacity onPress={() => alert("Reset password functionality")}>
-        <Text style={styles.forgotPassword}>Forgot your password?</Text>
-      </TouchableOpacity>
-    </View>
+          <Button
+            title="Sign In"
+            testID="login-submit-btn"
+            onPress={handleLogin}
+            disabled={loading}
+            loading={loading}
+            accessibilityState={{ disabled: loading }}
+            loadingProps={{ color: "white", size: "small" }}
+            buttonStyle={commonStyles.button}
+            titleStyle={commonStyles.buttonTitle}
+            disabledStyle={{ backgroundColor: colors.primary + "80" }}
+            ViewComponent={LinearGradient}
+            linearGradientProps={{
+              colors: colors.gradient,
+              start: { x: 0, y: 0 },
+              end: { x: 1, y: 0 },
+            }}
+          />
+
+          <View style={commonStyles.dividerContainer}>
+            <View style={commonStyles.divider} />
+            <Text style={commonStyles.dividerText}>OR</Text>
+            <View style={commonStyles.divider} />
+          </View>
+
+          <View style={commonStyles.socialButtonsContainer}>
+            <Button
+              title="Continue with Google"
+              icon={
+                <View style={commonStyles.iconContainer}>
+                  <AntDesign name="google" size={22} color="#DB4437" />
+                </View>
+              }
+              buttonStyle={commonStyles.socialButton}
+              titleStyle={commonStyles.socialButtonTitle}
+            />
+            <Button
+              title="Continue with Apple"
+              icon={
+                <View style={commonStyles.iconContainer}>
+                  <AntDesign name="apple1" size={22} color="black" />
+                </View>
+              }
+              buttonStyle={commonStyles.socialButton}
+              titleStyle={commonStyles.socialButtonTitle}
+            />
+          </View>
+
+          <View style={commonStyles.footerContainer}>
+            <Text style={commonStyles.footerText}>Don't have an account? </Text>
+            <Link href="/screens/signup">
+              <Text style={commonStyles.footerLink}>Sign Up</Text>
+            </Link>
+          </View>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
-};
-
-// Styles
-const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center", padding: 20 },
-  header: { flexDirection: "row", width: "100%", justifyContent: "space-between", alignItems: "center", marginBottom: 20 },
-  headerText: { fontSize: 20, fontWeight: "bold" },
-  welcomeText: { fontSize: 18, fontWeight: "bold", marginBottom: 20 },
-  brandText: { color: "#005f73", fontWeight: "bold" },
-  input: { width: "100%", padding: 10, borderWidth: 1, borderRadius: 5, marginBottom: 10, backgroundColor: "#f0f0f0" },
-  button: { backgroundColor: "#005f73", padding: 10, borderRadius: 5, alignItems: "center", width: "100%" },
-  buttonText: { color: "white", fontWeight: "bold" },
-  forgotPassword: { marginTop: 10, color: "blue" },
-});
-
-export default Login;
+}

@@ -1,4 +1,4 @@
-package com.anonymous.equimap
+package com.anonymous.MobileApp
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build
