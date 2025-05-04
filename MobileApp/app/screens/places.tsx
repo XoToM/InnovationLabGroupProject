@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { 
   Text, View, StyleSheet, TouchableOpacity, FlatList,
 } from 'react-native';
-import {Link} from 'expo-router'
+import {useRouter} from 'expo-router'
 import { API_DOMAIN } from '@/constants/config';
 
 export default function PlacesScreen() { //name functions consistently
   const [places, setPlaces] = useState<place[]>([]);
   const [loading, setLoading] = useState(true);
+	const router = useRouter();
 
   useEffect(() => {
     const fetchPlaces = async () => {
@@ -50,23 +51,21 @@ export default function PlacesScreen() { //name functions consistently
         keyExtractor={(item:place) => item.idPlace.toString()}
         numColumns={2}
         renderItem={({ item }) => (
-          <Link
-            href={{
-              pathname: '/screens/place',
-              params: {
-                name: item.name.toString(),
-                formattedAddress: item.formattedAddress.toString(),
-                latitude: item.latitude,
-                longitude: item.longitude,
-              },
-            }}
-          >
-            <TouchableOpacity style={styles.card}>
+          <View>
+            <TouchableOpacity style={styles.card} onPress={() => 
+              router.push({
+                pathname: '/screens/place',
+                params: {
+                  name: item.name.toString(),
+                    formattedAddress: item.formattedAddress.toString(),
+                    latitude: item.latitude,
+                    longitude: item.longitude,
+                }})}>
             <Text style={styles.title}>{item.name}</Text>
             <Text style={styles.subTitle}>{item.formattedAddress}</Text>
             <Text style={styles.coordinates}>{item.latitude}, {item.longitude}</Text>
             </TouchableOpacity>
-          </Link>
+          </View>
         )}
       />
     </View>
