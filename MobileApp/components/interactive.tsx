@@ -24,7 +24,7 @@ export function TextBtn({children, style,textStyle,onClick,icon,iconSize=20}:any
 export function Toggle({label, onChange, value}:any){
 	const { theme } = useTheme();
 	return (
-		<View style={[BaseTheme.toggleContainer, { backgroundColor: theme.card }]}>
+		<View style={[BaseTheme.toggleContainer]}>
 			<Switch 
 			accessible={true} 
 			accessibilityLabel={label} 
