@@ -3,6 +3,7 @@ import {
   View, Text, StyleSheet, TouchableOpacity, FlatList, Modal, ScrollView, Button, Image
 } from 'react-native';
 import { Link } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 
 // Hardcoded user location replceable by user inputted variable
 const USER_LOCATION = {
@@ -11,13 +12,40 @@ const USER_LOCATION = {
 };
 
 type Place = {
+  distance: number;
+  longitude: number;
+  latitude: number;
   idPlace: number;
   name: string;
   formattedAddress: string;
-  latitude: number;
-  longitude: number;
-  distance?: string; //distance now in class
-  photo?: string;
+  photo: string;
+  wheelchairAccessibleParking: number;
+  wheelchairAccessibleEntrance: number;
+  wheelchairAccessibleRestroom: number;
+  wheelchairAccessDescription: number;
+  description: string;
+  rating: number;
+  priceLevel: number;
+  nationalPhoneNumber: string;
+  regularOpeningHours: string;
+  delivery: number;
+  takeout: number;
+  dineIn: number;
+  outdoorSeating: number;
+  liveMusic: number;
+  allowsDogs: number;
+  goodForChildren: number;
+  goodForGroups: number;
+  goodForWatchingSports: number;
+  restroom: number;
+  reservable: number;
+  curbsidePickup: number;
+  menuForChildren: number;
+  acceptsCreditCards: number;
+  acceptsDebitCards: number;
+  acceptsCashOnly: number;
+  acceptsNfc: number;
+  
 };
 
 // Filter types
@@ -172,12 +200,24 @@ export default function PlacesScreen() {
 
   return (
     <View style={styles.screenContainer}>
-      <TouchableOpacity 
-        onPress={toggleModal}
-        style={styles.filterButton}
-       >
-        <Text style={styles.filterButtonText}>Filters</Text>
-      </TouchableOpacity>
+      {/* Header with aligned icons and filter button */}
+      <View style={styles.headerContainer}>
+        <Link href="/screens/menu" style={styles.iconButton}>
+          <TouchableOpacity>
+            <Ionicons name="menu" size={36} color="#284e1a" />
+          </TouchableOpacity>
+        </Link>
+
+        <TouchableOpacity onPress={toggleModal} style={styles.filterButton}>
+          <Text style={styles.filterButtonText}>Filters</Text>
+        </TouchableOpacity>
+
+        <Link href="/screens/settings" style={styles.iconButton}>
+          <TouchableOpacity>
+            <Ionicons name="settings" size={36} color="#284e1a" />
+          </TouchableOpacity>
+        </Link>
+      </View>
 
       <Modal
         transparent={true}
@@ -249,6 +289,37 @@ const styles = StyleSheet.create({
     maxWidth: 720,
     maxHeight: 1280 
   },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 8,
+  },
+  iconButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  filterButton: {
+    backgroundColor: '#284e1a',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+  },
+  filterButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+    letterSpacing: 0.5,
+  },
   listContainer: {
     width: '100%',
     paddingHorizontal: 15
@@ -258,8 +329,8 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: '#8bc34a',
-    width: '100%',        // Full width of FlatList container
-    marginVertical: 12,    // Space between cards
+    width: '100%',
+    marginVertical: 12,
     padding: 15,
     borderRadius: 8,
   },
@@ -284,26 +355,6 @@ const styles = StyleSheet.create({
     color: '#336',
     marginTop: 5,
     textAlign: 'center'
-  },
-  filterButton: {
-    backgroundColor: '#284e1a', // Professional green
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    alignSelf: 'center', // Centers horizontally
-    marginTop: 16,
-    marginBottom: 8,
-    elevation: 3, // Android shadow
-    shadowColor: '#000', // iOS shadow
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-  },
-  filterButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-    letterSpacing: 0.5,
   },
   modalOverlay: {
     flex: 1, 
@@ -348,7 +399,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#e9ecef', // Light border
+    borderBottomColor: '#e9ecef',
   },
   checkboxText: { 
     fontSize: 30,
