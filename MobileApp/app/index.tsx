@@ -12,7 +12,7 @@ export default function ScreensInitial() {
 	const [theme, themeSetter] = useState(LightTheme);
 	setTheme = themeSetter;
 
-	SplashScreen.hideAsync();
+  SplashScreen.hideAsync();
 
 	let [tog, togset] = useState(false);
 
