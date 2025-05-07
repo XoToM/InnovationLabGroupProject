@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { router } from "expo-router";
 import {
   View,
   Text,
@@ -16,20 +17,7 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useAuth } from "@/constants/auth-context";
 import { colors, commonStyles } from "@/constants/common";
 import { Feather, AntDesign } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
-import { useEffect } from "react";
-
-type RootStackParamList = {
-  Login: undefined;
-  Signup: undefined;
-  Home: undefined;
-};
-
-type SignupScreenNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  "Signup"
->;
 
 export default function SignupScreen() {
   const [name, setName] = useState("");
@@ -47,10 +35,6 @@ export default function SignupScreen() {
     password: "",
     confirmPassword: "",
   });
-  const navigation = useNavigation<SignupScreenNavigationProp>();
-  useEffect(() => {
-    navigation.setOptions({ headerShown: false });
-  }, [navigation]);
 
   const validateName = (name: string) => {
     if (!name) return "Name is required";
@@ -96,17 +80,15 @@ export default function SignupScreen() {
 
   async function handleSignup() {
     if (!validateForm()) return;
-
     setLocalLoading(true);
 
     try {
       const { error } = await signUp(name, email, password);
-
       if (error) {
         Alert.alert("Error", error);
       } else {
-        Alert.alert("Success", "Account created successfully! Please sign in.");
-        navigation.navigate("Login");
+        Alert.alert("Success", "Account created successfully!");
+        router.replace("/login");
       }
     } catch (error) {
       Alert.alert("Error", "An unexpected error occurred");
@@ -116,51 +98,61 @@ export default function SignupScreen() {
     }
   }
 
+  const inputStyles = (hasError: boolean) => [
+    commonStyles.inputContainer,
+    {
+      backgroundColor: "#99cc66",
+      borderColor: hasError ? "#ef4444" : "transparent",
+      borderWidth: hasError ? 1.5 : 0,
+    },
+  ];
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={commonStyles.container}
+      style={[commonStyles.container, { backgroundColor: "#ffffcc" }]}
     >
       <ScrollView contentContainerStyle={commonStyles.scrollContainer}>
         <View style={commonStyles.logoContainer}>
-          <LinearGradient
-            colors={colors.gradient}
-            style={commonStyles.logoCircle}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
+          <View
+            style={[
+              commonStyles.logoCircle,
+              { backgroundColor: "#ffcc00", shadowOpacity: 0.2 },
+            ]}
           >
-            <Text style={{ color: "white", fontSize: 40, fontWeight: "bold" }}>
+            <Text style={{ color: "#000", fontSize: 40, fontWeight: "bold" }}>
               A
             </Text>
-          </LinearGradient>
-          <Text style={commonStyles.logoText}>EquiMap</Text>
+          </View>
+          <Text style={[commonStyles.logoText, { color: "#000" }]}>
+            EquiMap
+          </Text>
         </View>
 
-        <Text style={commonStyles.title}>Create Account</Text>
-        <Text style={commonStyles.subtitle}>
+        <Text style={[commonStyles.title, { color: "#000" }]}>
+          Create Account
+        </Text>
+        <Text style={[commonStyles.subtitle, { color: "#333" }]}>
           Sign up to get started with all our features
         </Text>
 
         <View style={commonStyles.formContainer}>
           <Input
             placeholder="Full Name"
-            leftIcon={
-              <View style={commonStyles.iconContainer}>
-                <Feather name="user" size={20} color={colors.textLight} />
-              </View>
-            }
+            placeholderTextColor="#ffffffcc"
+            leftIcon={<Feather name="user" size={20} color="#fff" />}
             onChangeText={(text) => {
               setName(text);
               if (errors.name) setErrors({ ...errors, name: "" });
             }}
             value={name}
             autoCapitalize="words"
-            containerStyle={[
-              commonStyles.inputContainer,
-              errors.name ? commonStyles.inputContainerError : null,
-            ]}
-            inputContainerStyle={{ borderBottomWidth: 0 }}
-            inputStyle={commonStyles.inputStyle}
+            containerStyle={inputStyles(!!errors.name)}
+            inputContainerStyle={{
+              borderBottomWidth: 0,
+              backgroundColor: "#99cc66",
+            }}
+            inputStyle={{ color: "#fff" }}
             onBlur={() => setErrors({ ...errors, name: validateName(name) })}
           />
           {errors.name ? (
@@ -169,11 +161,8 @@ export default function SignupScreen() {
 
           <Input
             placeholder="Email"
-            leftIcon={
-              <View style={commonStyles.iconContainer}>
-                <Feather name="mail" size={20} color={colors.textLight} />
-              </View>
-            }
+            placeholderTextColor="#ffffffcc"
+            leftIcon={<Feather name="mail" size={20} color="#fff" />}
             onChangeText={(text) => {
               setEmail(text);
               if (errors.email) setErrors({ ...errors, email: "" });
@@ -181,12 +170,12 @@ export default function SignupScreen() {
             value={email}
             autoCapitalize="none"
             keyboardType="email-address"
-            containerStyle={[
-              commonStyles.inputContainer,
-              errors.email ? commonStyles.inputContainerError : null,
-            ]}
-            inputContainerStyle={{ borderBottomWidth: 0 }}
-            inputStyle={commonStyles.inputStyle}
+            containerStyle={inputStyles(!!errors.email)}
+            inputContainerStyle={{
+              borderBottomWidth: 0,
+              backgroundColor: "#99cc66",
+            }}
+            inputStyle={{ color: "#fff" }}
             onBlur={() => setErrors({ ...errors, email: validateEmail(email) })}
           />
           {errors.email ? (
@@ -195,20 +184,14 @@ export default function SignupScreen() {
 
           <Input
             placeholder="Password"
-            leftIcon={
-              <View style={commonStyles.iconContainer}>
-                <Feather name="lock" size={20} color={colors.textLight} />
-              </View>
-            }
+            placeholderTextColor="#ffffffcc"
+            leftIcon={<Feather name="lock" size={20} color="#fff" />}
             rightIcon={
-              <TouchableOpacity
-                onPress={() => setShowPassword(!showPassword)}
-                testID="password-visibility-toggle"
-              >
+              <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
                 <Feather
                   name={showPassword ? "eye-off" : "eye"}
                   size={20}
-                  color={colors.textLight}
+                  color="#fff"
                 />
               </TouchableOpacity>
             }
@@ -219,12 +202,12 @@ export default function SignupScreen() {
             value={password}
             secureTextEntry={!showPassword}
             autoCapitalize="none"
-            containerStyle={[
-              commonStyles.inputContainer,
-              errors.password ? commonStyles.inputContainerError : null,
-            ]}
-            inputContainerStyle={{ borderBottomWidth: 0 }}
-            inputStyle={commonStyles.inputStyle}
+            containerStyle={inputStyles(!!errors.password)}
+            inputContainerStyle={{
+              borderBottomWidth: 0,
+              backgroundColor: "#99cc66",
+            }}
+            inputStyle={{ color: "#fff" }}
             onBlur={() =>
               setErrors({ ...errors, password: validatePassword(password) })
             }
@@ -235,11 +218,8 @@ export default function SignupScreen() {
 
           <Input
             placeholder="Confirm Password"
-            leftIcon={
-              <View style={commonStyles.iconContainer}>
-                <Feather name="lock" size={20} color={colors.textLight} />
-              </View>
-            }
+            placeholderTextColor="#ffffffcc"
+            leftIcon={<Feather name="lock" size={20} color="#fff" />}
             rightIcon={
               <TouchableOpacity
                 onPress={() => setShowConfirmPassword(!showConfirmPassword)}
@@ -247,7 +227,7 @@ export default function SignupScreen() {
                 <Feather
                   name={showConfirmPassword ? "eye-off" : "eye"}
                   size={20}
-                  color={colors.textLight}
+                  color="#fff"
                 />
               </TouchableOpacity>
             }
@@ -259,12 +239,12 @@ export default function SignupScreen() {
             value={confirmPassword}
             secureTextEntry={!showConfirmPassword}
             autoCapitalize="none"
-            containerStyle={[
-              commonStyles.inputContainer,
-              errors.confirmPassword ? commonStyles.inputContainerError : null,
-            ]}
-            inputContainerStyle={{ borderBottomWidth: 0 }}
-            inputStyle={commonStyles.inputStyle}
+            containerStyle={inputStyles(!!errors.confirmPassword)}
+            inputContainerStyle={{
+              borderBottomWidth: 0,
+              backgroundColor: "#99cc66",
+            }}
+            inputStyle={{ color: "#fff" }}
             onBlur={() =>
               setErrors({
                 ...errors,
@@ -278,58 +258,60 @@ export default function SignupScreen() {
 
           <Button
             title="Create Account"
-            testID="signup-submit-btn"
             onPress={handleSignup}
             disabled={loading}
-            accessibilityState={{ disabled: loading }}
             loading={loading}
-            loadingProps={{ color: "white", size: "small" }}
-            buttonStyle={commonStyles.button}
-            titleStyle={commonStyles.buttonTitle}
-            disabledStyle={{ backgroundColor: colors.primary + "80" }}
-            ViewComponent={LinearGradient}
-            linearGradientProps={{
-              colors: colors.gradient,
-              start: { x: 0, y: 0 },
-              end: { x: 1, y: 0 },
+            buttonStyle={{
+              backgroundColor: "#ffcc00",
+              borderRadius: 12,
+              height: 56,
+              marginTop: 16,
             }}
+            titleStyle={{ color: "#000", fontWeight: "600" }}
+            disabledStyle={{ backgroundColor: "#ffcc00aa" }}
           />
 
           <View style={commonStyles.dividerContainer}>
             <View style={commonStyles.divider} />
-            <Text style={commonStyles.dividerText}>OR</Text>
+            <Text style={[commonStyles.dividerText, { color: "#333" }]}>
+              OR
+            </Text>
             <View style={commonStyles.divider} />
           </View>
 
           <View style={commonStyles.socialButtonsContainer}>
             <Button
               title="Sign up with Google"
-              icon={
-                <View style={commonStyles.iconContainer}>
-                  <AntDesign name="google" size={22} color="#DB4437" />
-                </View>
-              }
-              buttonStyle={commonStyles.socialButton}
-              titleStyle={commonStyles.socialButtonTitle}
+              icon={<AntDesign name="google" size={22} color="#000" />}
+              buttonStyle={{
+                backgroundColor: "#ffcc00",
+                borderRadius: 12,
+                height: 56,
+                marginTop: 12,
+              }}
+              titleStyle={{ color: "#000", fontWeight: "500", fontSize: 15 }}
             />
             <Button
               title="Sign up with Apple"
-              icon={
-                <View style={commonStyles.iconContainer}>
-                  <AntDesign name="apple1" size={22} color="black" />
-                </View>
-              }
-              buttonStyle={commonStyles.socialButton}
-              titleStyle={commonStyles.socialButtonTitle}
+              icon={<AntDesign name="apple1" size={22} color="black" />}
+              buttonStyle={{
+                backgroundColor: "#ffcc00",
+                borderRadius: 12,
+                height: 56,
+                marginTop: 12,
+              }}
+              titleStyle={{ color: "#000", fontWeight: "500", fontSize: 15 }}
             />
           </View>
 
           <View style={commonStyles.footerContainer}>
-            <Text style={commonStyles.footerText}>
+            <Text style={[commonStyles.footerText, { color: "#333" }]}>
               Already have an account?{" "}
             </Text>
-            <Link href="/screens/login">
-              <Text style={commonStyles.footerLink}>Sign Up</Text>
+            <Link href="/login">
+              <Text style={[commonStyles.footerLink, { color: "#000" }]}>
+                Sign In
+              </Text>
             </Link>
           </View>
         </View>
