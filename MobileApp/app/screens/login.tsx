@@ -14,10 +14,10 @@ import {
 import { Input, Button } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useAuth } from "../context/context";
-import { colors, commonStyles } from "../common/common";
+import { colors, commonStyles } from "@/common/common";
 import { Feather, AntDesign } from "@expo/vector-icons";
 import { Link } from "expo-router";
+import { useAuth } from "@/constants/auth-context";
 
 type RootStackParamList = {
   Login: undefined;
