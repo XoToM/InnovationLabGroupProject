@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity, FlatList, Modal, ScrollView, Button, Image
 } from 'react-native';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
 // Hardcoded user location replceable by user inputted variable
@@ -72,6 +72,7 @@ export default function PlacesScreen() {
   const [places, setPlaces] = useState<Place[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const router = useRouter();
 
   // State of filter by default
   const [filters, setFilters] = useState<Filters>({
@@ -197,7 +198,6 @@ export default function PlacesScreen() {
   }
   //shows how many itmes fetched, helps with filter assessment
   console.log('Rendering places list with', places.length, 'items');
-
   return (
     <View style={styles.screenContainer}>
       {/* Header with aligned icons and filter button */}
@@ -251,19 +251,16 @@ export default function PlacesScreen() {
         keyExtractor={(item) => item.idPlace.toString()}
         numColumns={1}
         renderItem={({ item }) => (
-          <Link
-            href={{
-              pathname: '/screens/place',
-              params: {
-                name: item.name,
-                formattedAddress: item.formattedAddress,
-                latitude: item.latitude,
-                longitude: item.longitude,
-                image: item.photo,
-              },
-            }}
-          >
-            <TouchableOpacity style={styles.card}>
+          
+          
+          
+            <TouchableOpacity style={styles.card}
+            onPress={() => router.push( 
+              {
+                  pathname: '/screens/place',
+                  params: item
+                })}
+            >
             {item.photo && (
               <Image 
                 source={{ uri: item.photo }} 
@@ -275,7 +272,6 @@ export default function PlacesScreen() {
               <Text style={styles.subTitle}>{item.formattedAddress}</Text>
               <Text style={styles.distanceText}>{item.distance} away</Text>
             </TouchableOpacity>
-          </Link>
         )}
       />
     </View>
