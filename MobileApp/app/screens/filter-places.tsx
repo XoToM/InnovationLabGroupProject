@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, Modal, ScrollView, Image, View } from 'react-native';
-import { Link } from 'expo-router';
+import { FlatList, Modal, ScrollView, Image, View, TouchableOpacity } from 'react-native';
+import { Link, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
 import { BackgroundView, CardView } from '@/components/views';
 import { TextBtn, Toggle } from '@/components/interactive';
 import { Title, H2, P } from '@/components/text';
-import { useTheme } from '@/context/ThemeContext';
 
+const router = useRouter()
 const USER_LOCATION = {
   latitude: 51.3781,
   longitude: -2.3597,
@@ -81,7 +81,6 @@ function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: numbe
 }
 
 export default function PlacesScreen() {
-  const { theme } = useTheme();
   const [places, setPlaces] = useState<Place[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -187,18 +186,21 @@ export default function PlacesScreen() {
   return (
     <BackgroundView>
       <CardView style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 }}>
-        <Link href="/screens/menu">
-          <TextBtn icon="menu" iconSize={36} onClick={() => {}} />
-        </Link>
+        
+        <TouchableOpacity style={{margin: 10}} onPress={() => router.push('/screens/map')}>
+          <Ionicons name="home" size={28} />
+        </TouchableOpacity>
+    
 
-        <TextBtn onClick={toggleModal} style={{ paddingHorizontal: 24 }}>
-          Filters
-        </TextBtn>
+      <TextBtn onClick={toggleModal} style={{ paddingHorizontal: 24 }}>
+        Filters
+      </TextBtn>
 
-        <Link href="/screens/settings">
-          <TextBtn icon="settings" iconSize={36} onClick={() => {}} />
-        </Link>
-      </CardView>
+      <TouchableOpacity style={{margin: 10}} onPress={() => router.push('/screens/settings')}>
+        <Ionicons name="settings" size={28}/>
+      </TouchableOpacity>
+
+    </CardView>
 
       <Modal
         transparent={true}
@@ -234,36 +236,34 @@ export default function PlacesScreen() {
         keyExtractor={(item) => item.idPlace.toString()}
         numColumns={1}
         renderItem={({ item }) => (
-          <Link
-            href={{
-              pathname: '/screens/place',
-              params: {
-                name: item.name,
-                formattedAddress: item.formattedAddress,
-                latitude: item.latitude,
-                longitude: item.longitude,
-                image: item.photo,
-              },
-            }}
-            asChild
-          >
-            <View style={{ marginVertical: 12 }}>
-              <CardView style={{ width: '100%', padding: 15 }}>
-                {item.photo && (
-                  <Image
-                    source={{ uri: item.photo }}
-                    style={{ width: '100%', height: 150, borderRadius: 8, marginBottom: 10 }}
-                    resizeMode="cover"
-                  />
-                )}
-                <H2 style={{ textAlign: 'center' }}>{item.name}</H2>
-                <P style={{ textAlign: 'center' }}>{item.formattedAddress}</P>
-                <P style={{ textAlign: 'center', marginTop: 5 }}>
-                  {`${item.distance} away`}
-                </P>
+          <CardView style={{margin: 10}}>
+              <TouchableOpacity 
+              onPress={() => router.push( 
+                {
+                    pathname: '/screens/place',
+                    params: {
+                      name: item.name,
+                      formattedAddress: item.formattedAddress,
+                      latitude: item.latitude,
+                      longitude: item.longitude,
+                      image: item.photo,
+                    },
+                  })}
+              >
+                  {item.photo && (
+                    <Image
+                      source={{ uri: item.photo }}
+                      style={{ width: '100%', height: 150, borderRadius: 8, marginBottom: 10 }}
+                      resizeMode="cover"
+                    />
+                  )}
+                  <H2 style={{ textAlign: 'center' }}>{item.name}</H2>
+                  <P style={{ textAlign: 'center' }}>{item.formattedAddress}</P>
+                  <P style={{ textAlign: 'center', marginTop: 5 }}>
+                    {`${item.distance} away`}
+                  </P>
+              </TouchableOpacity>
               </CardView>
-            </View>
-          </Link>
         )}
       />
     </BackgroundView>
