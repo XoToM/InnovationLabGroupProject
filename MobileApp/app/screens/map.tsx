@@ -114,7 +114,7 @@ export default function ScreenMap() {
 			{Constants.expoConfig?.extra?.MAPBOX_ACCESS_TOKEN?(
 				<MapView style={StyleSheet.absoluteFillObject} compassEnabled={true}>
 					
-					<Camera defaultSettings={{ centerCoordinate: [-2.3643467114359953, 51.378860189408165], zoomLevel: 12 }}/>
+					<Camera defaultSettings={{ centerCoordinate: [-2.3643467114359953, 51.378860189408165], zoomLevel: 13 }}/>
 					{
 						locations.map((loc:any,i:number)=>{
 							return	<PointAnnotation key={i+">"+loc.name} id={""+i} coordinate={[loc.longitude, loc.latitude]} anchor={{x:0.5,y:1}} onSelected={()=>
