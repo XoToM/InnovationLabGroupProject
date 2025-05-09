@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FlatList, Modal, ScrollView, Image, View, TouchableOpacity } from 'react-native';
 import { Link, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { BackgroundView, CardView } from '@/components/views';
 import { TextBtn, Toggle } from '@/components/interactive';
@@ -65,6 +66,20 @@ type FilterKey =
 
 type Filters = Record<FilterKey, boolean>;
 
+// Map accessibility options to filter keys
+const accessibilityToFilterMap: Partial<Record<keyof AccessibilityOptions, FilterKey>> = {
+  'Wheelchair user': 'wheelchairAccessibleEntrance',
+  'Guide dog owner': 'allowsDogs',
+  'Social anxiety': 'reservable'
+};
+
+type AccessibilityOptions = {
+  'Wheelchair user': boolean;
+  'Guide dog owner': boolean;
+  'Social anxiety': boolean;
+};
+
+
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): string {
   const R = 6371;
   const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -114,6 +129,38 @@ export default function PlacesScreen() {
     { key: 'acceptsNfc', label: 'Contactless Payment' },
     { key: 'acceptsCashOnly', label: 'Cash Payment' },
   ];
+
+  useEffect(() => {
+    const loadSettingsAndFetch = async () => {
+      try {
+        const savedOptions = await AsyncStorage.getItem('accessibilityOptions');
+        if (savedOptions) {
+          const parsedOptions: AccessibilityOptions = JSON.parse(savedOptions);
+          console.log('Loaded accessibility options:', parsedOptions);
+
+          // Map accessibility options to filters
+          const updatedFilters = { ...filters };
+          Object.entries(accessibilityToFilterMap).forEach(([accessibilityKey, filterKey]) => {
+            if (parsedOptions[accessibilityKey as keyof AccessibilityOptions]) {
+              updatedFilters[filterKey] = true;
+            }
+          });
+
+          console.log('Updated filters based on settings:', updatedFilters);
+          setFilters(updatedFilters);
+          await fetchPlaces(updatedFilters); 
+        } else {
+          console.log('No accessibility options found, fetching with default filters');
+          await fetchPlaces(); 
+        }
+      } catch (error) {
+        console.error('Failed to load accessibility settings:', error);
+        await fetchPlaces();
+      }
+    };
+
+    loadSettingsAndFetch();
+  }, []);
 
   const fetchPlaces = async (appliedFilters = filters) => {
     const activeFilters = Object.entries(appliedFilters)
