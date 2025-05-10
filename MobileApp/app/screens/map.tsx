@@ -45,10 +45,6 @@ export default function ScreenMap() {
 	const { theme } = useTheme();
 	let animated_pos = new Animated.Value(-600);
 
-	// animated_pos.interpolate({
-	// 	inputRange: [0,1],
-	// 	outputRange:[ 0,400],
-	// });
 
 	let [showFeatured, setShowFeatured] = useState(false);
 	let featuredPos:DimensionValue = showFeatured?0:"-60%";
@@ -68,22 +64,6 @@ export default function ScreenMap() {
 			}).start();
 		}
 	},[showFeatured, animated_pos]);
-	//let featuredPos = useAnimatedValue(-300);
-	//	let locations = [
-	// 		{name:"Park", latitude:51.37692748456796, longitude:-2.436908958136046, image:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Halleyparknovember_b.jpg/800px-Halleyparknovember_b.jpg", formattedAddress: "ADDRESS_HERE"},
-	// 		{name:"Castle1",latitude:51.379306590874634, longitude: -2.354695695635474, image:"https://nt.global.ssl.fastly.net/binaries/content/gallery/website/national/regions/sussex/places/bodiam-castle/library/winter/bodiam-castle-and-moat-in-winter-1456846.jpg", formattedAddress: "ADDRESS_HERE"},
-	// 		{name:"Castle2",latitude:52.956237708377174, longitude: 4.760612002768222, image:"https://nt.global.ssl.fastly.net/binaries/content/gallery/website/national/regions/sussex/places/bodiam-castle/library/winter/bodiam-castle-and-moat-in-winter-1456846.jpg", formattedAddress: "ADDRESS_HERE"},
-	// 		{name:"Castle3",latitude:35.68616796711613, longitude: 139.75224497059952, image:"https://nt.global.ssl.fastly.net/binaries/content/gallery/website/national/regions/sussex/places/bodiam-castle/library/winter/bodiam-castle-and-moat-in-winter-1456846.jpg", formattedAddress: "ADDRESS_HERE"},
-	// 		{name:"Castle4",latitude:35.68616796711613, longitude: 139.75224497059952, image:"https://nt.global.ssl.fastly.net/binaries/content/gallery/website/national/regions/sussex/places/bodiam-castle/library/winter/bodiam-castle-and-moat-in-winter-1456846.jpg", formattedAddress: "ADDRESS_HERE"},
-	// 	];
-
-	// useEffect(()=>{
-	// 	Animated.timing(animated_pos, {
-	// 		toValue: showFeatured?0:-200,
-	// 		duration: 1,
-	// 		useNativeDriver:true
-	// 	}).start();
-	// },[animated_pos,showFeatured]);
 
 	let [locations, setLocations]:[any,any] = useState([]);
 
