@@ -1,55 +1,17 @@
 import React, { useState } from 'react';
 import {
-  Text, View, StyleSheet, Image, TouchableOpacity, Modal, ScrollView
+ StyleSheet, Image, TouchableOpacity, ScrollView
 } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
-import { Title, P, H1, H2, H3 } from '@/components/text';
-import { TextBtn } from '@/components/interactive';
+import { P, H1, H2, H3 } from '@/components/text';
 import { BackgroundView, CardView } from '@/components/views';
 const router = useRouter();
 export default function App() {
   const [activeInfo, setActiveInfo] = useState(null);
   const [hoursOpen, setHoursOpen] = useState(false);
-  const { idPlace, name, formattedAddress, photo, wheelchairAccessibleParking, wheelchairAccessibleEntrance, wheelchairAccessibleRestroom, wheelchairAccessDescription, inductionLoop, inductionLoopDescription, description, rating, priceLevel, nationalPhoneNumber, latitude, longitude, regularOpeningHours, delivery, takeout, dineIn, outdoorSeating, liveMusic, allowsDogs, goodForChildren, goodForGroups, goodForWatchingSports, restroom, reservable, curbsidePickup, menuForChildren, acceptsCreditCards, acceptsDebitCards, acceptsCashOnly, acceptsNfc } = useLocalSearchParams(); //add additional parameters
-
-
-  // const idPlace = 1;
-  // const name = "The Friendly Cat";
-  // const formattedAddress = "123 Fox Lane, Woodland City, WC1 2AB, UK";
-  // const photo = "https://tse2.mm.bing.net/th/id/OIP._yk1QSrMikTretJkugcWjgHaDb?rs=1&pid=ImgDetMain";
-  // const wheelchairAccessibleParking = 1;
-  // const wheelchairAccessibleEntrance = 1;
-  // const wheelchairAccessibleRestroom = 0;
-  // const wheelchairAccessDescription = "Ramp at front entrance, no accessible restroom.";
-  // const inductionLoop = 1;
-  // const inductionLoopDescription = "Hearing loop available at the main bar.";
-  // const description = "A vibrant, family-friendly gastropub with outdoor seating and live weekend music.";
-  // const rating = 4;
-  // const priceLevel = "PRICE_LEVEL_VERY_EXPENSIVE";
-  // const nationalPhoneNumber = "+441234567890";
-  // const latitude = 51.3781;
-  // const longitude = -2.3597;
-  // const regularOpeningHours = "Mon-Fri: 12PM-11PM | Sat-Sun: 11AM-12AM";
-  // const delivery = 0;
-  // const takeout = 1;
-  // const dineIn = 0;
-  // const outdoorSeating = 1;
-  // const liveMusic = 1;
-  // const allowsDogs = 1;
-  // const goodForChildren = 1;
-  // const goodForGroups = 1;
-  // const goodForWatchingSports = 0;
-  // const restroom = 1;
-  // const reservable = 0;
-  // const curbsidePickup = 0;
-  // const menuForChildren = 1;
-  // const acceptsCreditCards = 0;
-  // const acceptsDebitCards = 1;
-  // const acceptsCashOnly = 1;
-  // const acceptsNfc = 1;
+  const { name, formattedAddress, photo, wheelchairAccessibleParking, wheelchairAccessibleEntrance, wheelchairAccessibleRestroom, wheelchairAccessDescription, inductionLoop, inductionLoopDescription, description, rating, priceLevel, nationalPhoneNumber, latitude, longitude, regularOpeningHours, delivery, takeout, dineIn, outdoorSeating, liveMusic, allowsDogs, goodForChildren, goodForGroups, goodForWatchingSports, restroom, reservable, curbsidePickup, menuForChildren, acceptsCreditCards, acceptsDebitCards, acceptsCashOnly, acceptsNfc } = useLocalSearchParams(); //add additional parameters
 
   const toggleInfo = (type: any) => {
     setActiveInfo(activeInfo === type ? null : type);
@@ -89,8 +51,8 @@ export default function App() {
           <Ionicons name="settings" size={36} />
         </TouchableOpacity>
       </CardView>
-      <ScrollView style={styles.scrollContainer}> {/*you need scroll view to scroll but then you need background to make it look good. thats why its nested like this freaky deaky ass shit*/}
-        <BackgroundView style={styles.container}>
+      <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent}> {/*you need scroll view to scroll but then you need background to make it look good. thats why its nested like this freaky deaky ass shit*/}
+        
 
 
 
@@ -233,22 +195,23 @@ export default function App() {
             </CardView>
           )}
 
-          
-
+        {regularOpeningHours && (
           <CardView style={styles.hoursBox}>
-            <TouchableOpacity style={styles.dropdownButton} onPress={() => setHoursOpen(!hoursOpen)}>
+            <TouchableOpacity onPress={() => setHoursOpen(!hoursOpen)} style={styles.dropdownButton}>
               <P>{hoursOpen ? '▼ Hide Opening Hours ▼' : '▲ Show Opening Hours ▲'}</P>
             </TouchableOpacity>
 
-            {hoursOpen && (
-              <P style={styles.contactText}>{String(regularOpeningHours)}</P>
-            )}
+            {hoursOpen &&
+              String(regularOpeningHours)
+                .split(/[\n;|]+/)
+                .map((line, index) => (
+                  <P key={index} style={styles.contactText}>
+                    {line.trim()}
+                  </P>
+                ))}
           </CardView>
-
-
-
-
-        </BackgroundView>
+        )}
+        
       </ScrollView>
     </BackgroundView>
 
@@ -258,6 +221,16 @@ export default function App() {
 
 const styles = StyleSheet.create({
 
+  scrollContainer: {
+    flex: 1,
+    width: '100%',
+  },
+  
+  scrollContent: {
+    paddingBottom: 20,
+    alignItems: 'center',
+    width: '100%',
+  },
   container: {
     flex: 1,
     //backgroundColor: '#f5f5a3',
@@ -276,9 +249,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#333',
-  },
-  scrollContainer: {
-
   },
   pageTitle: {
     //backgroundColor: '#c5da8c',
@@ -333,6 +303,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '90%',
     marginVertical: 10,
+    alignItems: 'center',
   },
   contactText: {
     fontSize: 14,
@@ -355,11 +326,13 @@ const styles = StyleSheet.create({
   },
 
   hoursBox: {
-    //backgroundColor: '#e0e0e0',
-    width: '100%',
-    padding: 10,
+    width: '90%',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
     borderRadius: 8,
     marginBottom: 10,
+    alignSelf: 'center',
+    //backgroundColor: '#ddd',
   },
   stars: {
     fontSize: 18,

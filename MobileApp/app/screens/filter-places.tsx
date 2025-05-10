@@ -288,13 +288,7 @@ export default function PlacesScreen() {
               onPress={() => router.push( 
                 {
                     pathname: '/screens/place',
-                    params: {
-                      name: item.name,
-                      formattedAddress: item.formattedAddress,
-                      latitude: item.latitude,
-                      longitude: item.longitude,
-                      image: item.photo,
-                    },
+                    params: item
                   })}
               >
                   {item.photo && (
