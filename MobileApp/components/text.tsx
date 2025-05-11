@@ -1,6 +1,7 @@
 import { Text } from "react-native";
 import { useTheme } from '../context/ThemeContext';
 import BaseTheme from "@/constants/themes/base";
+import type { ReactNode } from "react";
 
 export function Title({children,style}:{children:string,style?:any}){
 	const { theme } = useTheme();

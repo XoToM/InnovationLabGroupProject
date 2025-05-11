@@ -3,7 +3,23 @@ import { useTheme } from '../context/ThemeContext';
 import { TouchableOpacity, View,Text, Switch } from "react-native";
 import BaseTheme from "@/constants/themes/base";
 
+const fallbackStyle = {
+  button: {},
+  buttonText: {},
+  toggleContainer: {},
+  toggle: {},
+  toggleLabel: {},
+};
 
+export function TextBtn({
+  children,
+  style,
+  textStyle,
+  onClick,
+  icon,
+  iconSize = 20,
+}: any) {
+  const style_ctx = useContext(StyleContext) || fallbackStyle;
 
 export function TextBtn({children, style,textStyle,onClick,icon,iconSize=20}:any){
 	const { theme } = useTheme();
