@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { router } from "expo-router";
 import {
   View,
   Text,
@@ -13,12 +14,10 @@ import {
 import { Input, Button } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useAuth } from "../../constants/auth-context";
-import { colors, commonStyles } from "../../constants/common";
+import { colors, commonStyles } from "@/common/common";
 import { Feather, AntDesign } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
-import { useEffect } from "react";
+import { useAuth } from "@/constants/auth-context";
 
 type RootStackParamList = {
   Login: undefined;
@@ -35,17 +34,15 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-
   const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState({
-    email: "",
-    password: "",
-  });
+  const [errors, setErrors] = useState({ email: "", password: "" });
+
   const navigation = useNavigation<LoginScreenNavigationProp>();
+  const { signIn } = useAuth();
+
   useEffect(() => {
     navigation.setOptions({ headerShown: false });
   }, [navigation]);
-  const { signIn } = useAuth();
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -63,32 +60,20 @@ export default function LoginScreen() {
   const validateForm = () => {
     const emailError = validateEmail(email);
     const passwordError = validatePassword(password);
-
-    setErrors({
-      email: emailError,
-      password: passwordError,
-    });
-
+    setErrors({ email: emailError, password: passwordError });
     return !emailError && !passwordError;
   };
 
   async function handleLogin() {
     if (!validateForm()) return;
-
     setLoading(true);
-
     try {
       const { error } = await signIn(email, password);
-
-      if (error) {
-        Alert.alert("Error", error);
-      } else {
-        console.log("Login success! Navigating...");
-        navigation.navigate("Home");
-      }
-    } catch (error) {
-      Alert.alert("Error", "An unexpected error occurred");
-      console.error(error);
+      if (error) Alert.alert("Login Failed", error);
+      else router.replace("/map");
+    } catch (err) {
+      Alert.alert("Error", "Unexpected error during login.");
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -97,34 +82,39 @@ export default function LoginScreen() {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={commonStyles.container}
+      style={[commonStyles.container, { backgroundColor: "#ffffcc" }]}
     >
       <ScrollView contentContainerStyle={commonStyles.scrollContainer}>
         <View style={commonStyles.logoContainer}>
-          <LinearGradient
-            colors={colors.gradient}
-            style={commonStyles.logoCircle}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
+          <View
+            style={[
+              commonStyles.logoCircle,
+              { backgroundColor: "#ffcc00", shadowOpacity: 0.2 },
+            ]}
           >
-            <Text style={{ color: "white", fontSize: 40, fontWeight: "bold" }}>
+            <Text style={{ color: "#000", fontSize: 40, fontWeight: "bold" }}>
               A
             </Text>
-          </LinearGradient>
-          <Text style={commonStyles.logoText}>EquiMap</Text>
+          </View>
+          <Text style={[commonStyles.logoText, { color: "#000" }]}>
+            EquiMap
+          </Text>
         </View>
 
-        <Text style={commonStyles.title}>Welcome Back</Text>
-        <Text style={commonStyles.subtitle}>
+        <Text style={[commonStyles.title, { color: "#000" }]}>
+          Welcome Back
+        </Text>
+        <Text style={[commonStyles.subtitle, { color: "#333" }]}>
           Sign in to your account to continue
         </Text>
 
         <View style={commonStyles.formContainer}>
           <Input
             placeholder="Email"
+            placeholderTextColor="#ffffffcc"
             leftIcon={
               <View style={commonStyles.iconContainer}>
-                <Feather name="mail" size={20} color={colors.textLight} />
+                <Feather name="mail" size={20} color="#fff" />
               </View>
             }
             onChangeText={(text) => {
@@ -136,10 +126,17 @@ export default function LoginScreen() {
             keyboardType="email-address"
             containerStyle={[
               commonStyles.inputContainer,
-              errors.email ? commonStyles.inputContainerError : null,
+              {
+                backgroundColor: "#99cc66",
+                borderColor: errors.email ? "#ef4444" : "transparent",
+                borderWidth: errors.email ? 1.5 : 0,
+              },
             ]}
-            inputContainerStyle={{ borderBottomWidth: 0 }}
-            inputStyle={commonStyles.inputStyle}
+            inputContainerStyle={{
+              borderBottomWidth: 0,
+              backgroundColor: "#99cc66",
+            }}
+            inputStyle={{ color: "#fff" }}
             onBlur={() => setErrors({ ...errors, email: validateEmail(email) })}
           />
           {errors.email ? (
@@ -148,9 +145,10 @@ export default function LoginScreen() {
 
           <Input
             placeholder="Password"
+            placeholderTextColor="#ffffffcc"
             leftIcon={
               <View style={commonStyles.iconContainer}>
-                <Feather name="lock" size={20} color={colors.textLight} />
+                <Feather name="lock" size={20} color="#fff" />
               </View>
             }
             rightIcon={
@@ -161,7 +159,7 @@ export default function LoginScreen() {
                 <Feather
                   name={showPassword ? "eye-off" : "eye"}
                   size={20}
-                  color={colors.textLight}
+                  color="#fff"
                 />
               </TouchableOpacity>
             }
@@ -174,10 +172,17 @@ export default function LoginScreen() {
             autoCapitalize="none"
             containerStyle={[
               commonStyles.inputContainer,
-              errors.password ? commonStyles.inputContainerError : null,
+              {
+                backgroundColor: "#99cc66",
+                borderColor: errors.password ? "#ef4444" : "transparent",
+                borderWidth: errors.password ? 1.5 : 0,
+              },
             ]}
-            inputContainerStyle={{ borderBottomWidth: 0 }}
-            inputStyle={commonStyles.inputStyle}
+            inputContainerStyle={{
+              borderBottomWidth: 0,
+              backgroundColor: "#99cc66",
+            }}
+            inputStyle={{ color: "#fff" }}
             onBlur={() =>
               setErrors({ ...errors, password: validatePassword(password) })
             }
@@ -193,21 +198,22 @@ export default function LoginScreen() {
             disabled={loading}
             loading={loading}
             accessibilityState={{ disabled: loading }}
-            loadingProps={{ color: "white", size: "small" }}
-            buttonStyle={commonStyles.button}
-            titleStyle={commonStyles.buttonTitle}
-            disabledStyle={{ backgroundColor: colors.primary + "80" }}
-            ViewComponent={LinearGradient}
-            linearGradientProps={{
-              colors: colors.gradient,
-              start: { x: 0, y: 0 },
-              end: { x: 1, y: 0 },
+            loadingProps={{ color: "black", size: "small" }}
+            buttonStyle={{
+              backgroundColor: "#ffcc00",
+              borderRadius: 12,
+              height: 56,
+              marginTop: 16,
             }}
+            titleStyle={{ color: "#000", fontWeight: "600" }}
+            disabledStyle={{ backgroundColor: "#ffcc00aa" }}
           />
 
           <View style={commonStyles.dividerContainer}>
             <View style={commonStyles.divider} />
-            <Text style={commonStyles.dividerText}>OR</Text>
+            <Text style={[commonStyles.dividerText, { color: "#333" }]}>
+              OR
+            </Text>
             <View style={commonStyles.divider} />
           </View>
 
@@ -216,11 +222,16 @@ export default function LoginScreen() {
               title="Continue with Google"
               icon={
                 <View style={commonStyles.iconContainer}>
-                  <AntDesign name="google" size={22} color="#DB4437" />
+                  <AntDesign name="google" size={22} color="#000" />
                 </View>
               }
-              buttonStyle={commonStyles.socialButton}
-              titleStyle={commonStyles.socialButtonTitle}
+              buttonStyle={{
+                backgroundColor: "#ffcc00",
+                borderRadius: 12,
+                height: 56,
+                marginTop: 12,
+              }}
+              titleStyle={{ color: "#000", fontWeight: "500", fontSize: 15 }}
             />
             <Button
               title="Continue with Apple"
@@ -229,15 +240,24 @@ export default function LoginScreen() {
                   <AntDesign name="apple1" size={22} color="black" />
                 </View>
               }
-              buttonStyle={commonStyles.socialButton}
-              titleStyle={commonStyles.socialButtonTitle}
+              buttonStyle={{
+                backgroundColor: "#ffcc00",
+                borderRadius: 12,
+                height: 56,
+                marginTop: 12,
+              }}
+              titleStyle={{ color: "#000", fontWeight: "500", fontSize: 15 }}
             />
           </View>
 
           <View style={commonStyles.footerContainer}>
-            <Text style={commonStyles.footerText}>Don't have an account? </Text>
-            <Link href="/screens/signup">
-              <Text style={commonStyles.footerLink}>Sign Up</Text>
+            <Text style={[commonStyles.footerText, { color: "#333" }]}>
+              Don't have an account?{" "}
+            </Text>
+            <Link href="/signup">
+              <Text style={[commonStyles.footerLink, { color: "#000" }]}>
+                Sign Up
+              </Text>
             </Link>
           </View>
         </View>
