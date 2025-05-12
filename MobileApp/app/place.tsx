@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState } from 'react';
 import {
   Text, View, StyleSheet, Image, TouchableOpacity, Modal, ScrollView
@@ -50,11 +51,30 @@ export default function App() {
   // const acceptsDebitCards = 1;
   // const acceptsCashOnly = 1;
   // const acceptsNfc = 1;
+=======
+import React, { useState } from "react";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Modal,
+} from "react-native";
+import { useLocalSearchParams } from "expo-router";
+
+export default function App() {
+  const [activeInfo, setActiveInfo] = useState(null);
+  const [menuVisible, setMenuVisible] = useState(false);
+  const { name, formattedAddress, latitude, longitude } =
+    useLocalSearchParams(); //add additional parametrs
+>>>>>>> 98e2ff42b3b1e17f9ecd8eeab57f858e7963d5e3
 
   const toggleInfo = (type: any) => {
     setActiveInfo(activeInfo === type ? null : type);
   };
 
+<<<<<<< HEAD
   const renderStars = (rating: any) => {
     const fullStars = Math.floor(Number(rating));
     const stars = [];
@@ -268,15 +288,129 @@ const styles = StyleSheet.create({
     //backgroundColor: '#8BC34A',
     flexWrap: 'wrap',
     width: '100%',
+=======
+  return (
+    <View style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <Image
+          source={require("../assets/images/icon.png")}
+          style={styles.logo}
+        />
+        <Text style={styles.headerText}>EquiMap</Text>
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => setMenuVisible(true)}
+        >
+          <Text style={styles.menuIcon}>☰</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Page Title */}
+      <Text style={styles.pageTitle}>{name}</Text>
+
+      {/* Large Image */}
+      <Image
+        source={require("../assets/images/better-icon.png")}
+        style={[styles.largeImage, { resizeMode: "stretch" }]}
+      />
+
+      {/* Buttons Section */}
+      <View style={styles.buttonContainer}>
+        {[
+          { type: "accessibility", label: "♿" },
+          { type: "lgbt", label: "🏳️‍🌈" },
+          { type: "custom1", label: "🔍" }, // Placeholder
+          { type: "custom2", label: "🍽️" }, // Placeholder
+        ].map(({ type, label }) => (
+          <View key={type} style={styles.buttonWrapper}>
+            <TouchableOpacity
+              style={styles.iconButton}
+              onPress={() => toggleInfo(type)}
+            >
+              <Text style={styles.iconText}>{label}</Text>
+            </TouchableOpacity>
+            {activeInfo === type && <Text style={styles.arrow}>▲</Text>}
+          </View>
+        ))}
+      </View>
+
+      {/* Info Box */}
+      {activeInfo && (
+        <View style={styles.noticeBox}>
+          <Text style={styles.noticeText}>
+            {activeInfo === "accessibility"
+              ? "This location has great disability access."
+              : activeInfo === "lgbt"
+              ? "This location supports LGBTQ+ inclusivity."
+              : "Placeholder text for new button."}
+          </Text>
+        </View>
+      )}
+
+      {/* Rating & Pricing */}
+      <View style={styles.ratingContainer}>
+        <Text style={styles.stars}>⭐⭐⭐⭐☆</Text>
+        <Text style={styles.price}>££</Text>
+      </View>
+
+      {/* Description */}
+      <Text style={styles.description}>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua.
+      </Text>
+
+      {/* Menu Modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={menuVisible}
+        onRequestClose={() => setMenuVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.menuTray}>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setMenuVisible(false)}
+            >
+              <Text style={styles.closeText}>✖ Close</Text>
+            </TouchableOpacity>
+            {/* Add menu content here */}
+          </View>
+        </View>
+      </Modal>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#f5f5a3",
+    alignItems: "center",
+  },
+  header: {
+    flexDirection: "row",
+    backgroundColor: "#8BC34A",
+    width: "100%",
+>>>>>>> 98e2ff42b3b1e17f9ecd8eeab57f858e7963d5e3
     padding: 15,
     alignItems: "center",
     justifyContent: "space-between",
   },
+<<<<<<< HEAD
+=======
+  logo: {
+    width: 40,
+    height: 40,
+  },
+>>>>>>> 98e2ff42b3b1e17f9ecd8eeab57f858e7963d5e3
   headerText: {
     fontSize: 20,
     fontWeight: "bold",
     color: "#333",
   },
+<<<<<<< HEAD
   scrollContainer: {
 
   },
@@ -284,6 +418,19 @@ const styles = StyleSheet.create({
     //backgroundColor: '#c5da8c',
     width: '100%',
     textAlign: 'center',
+=======
+  menuButton: {
+    padding: 10,
+  },
+  menuIcon: {
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+  pageTitle: {
+    backgroundColor: "#c5da8c",
+    width: "100%",
+    textAlign: "center",
+>>>>>>> 98e2ff42b3b1e17f9ecd8eeab57f858e7963d5e3
     fontSize: 24,
     fontWeight: "bold",
     padding: 10,
@@ -316,7 +463,11 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   noticeBox: {
+<<<<<<< HEAD
     //backgroundColor: '#f4a261',
+=======
+    backgroundColor: "#f4a261",
+>>>>>>> 98e2ff42b3b1e17f9ecd8eeab57f858e7963d5e3
     padding: 10,
     borderRadius: 5,
     width: "90%",
@@ -334,6 +485,7 @@ const styles = StyleSheet.create({
     width: "90%",
     marginVertical: 10,
   },
+<<<<<<< HEAD
   contactText: {
     fontSize: 14,
     textAlign: 'left',
@@ -361,6 +513,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 10,
   },
+=======
+>>>>>>> 98e2ff42b3b1e17f9ecd8eeab57f858e7963d5e3
   stars: {
     fontSize: 18,
   },
@@ -375,6 +529,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
+<<<<<<< HEAD
     //backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dark overlay
     justifyContent: 'center',
     alignItems: 'center',
@@ -384,6 +539,16 @@ const styles = StyleSheet.create({
     width: '90%',
     height: '80%',
     //backgroundColor: '#fff',
+=======
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Dark overlay
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  menuTray: {
+    width: "90%",
+    height: "80%",
+    backgroundColor: "#fff",
+>>>>>>> 98e2ff42b3b1e17f9ecd8eeab57f858e7963d5e3
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
@@ -399,5 +564,8 @@ const styles = StyleSheet.create({
     color: "#333",
     fontWeight: "bold",
   },
+<<<<<<< HEAD
 
+=======
+>>>>>>> 98e2ff42b3b1e17f9ecd8eeab57f858e7963d5e3
 });

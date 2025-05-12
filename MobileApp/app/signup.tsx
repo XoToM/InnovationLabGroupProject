@@ -12,10 +12,15 @@ import {
   Alert,
 } from "react-native";
 import { Input, Button } from "@rneui/themed";
+<<<<<<< HEAD
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useAuth } from "@/constants/auth-context";
 import { colors, commonStyles } from "@/constants/common";
+=======
+import { useAuth } from "../context/context";
+import { colors, commonStyles } from "../common/common";
+>>>>>>> 98e2ff42b3b1e17f9ecd8eeab57f858e7963d5e3
 import { Feather, AntDesign } from "@expo/vector-icons";
 import { Link } from "expo-router";
 
