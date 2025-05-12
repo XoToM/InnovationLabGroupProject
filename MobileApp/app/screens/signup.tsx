@@ -12,8 +12,8 @@ import {
   Alert,
 } from "react-native";
 import { Input, Button } from "@rneui/themed";
-import { useAuth } from "../context/context";
-import { colors, commonStyles } from "../common/common";
+import { useAuth } from "@/context/context";
+import { colors, commonStyles } from "@/common/common";
 import { Feather, AntDesign } from "@expo/vector-icons";
 import { Link } from "expo-router";
 
@@ -86,7 +86,7 @@ export default function SignupScreen() {
         Alert.alert("Error", error);
       } else {
         Alert.alert("Success", "Account created successfully!");
-        router.replace("/login");
+        router.replace("/screens/login");
       }
     } catch (error) {
       Alert.alert("Error", "An unexpected error occurred");
@@ -306,7 +306,7 @@ export default function SignupScreen() {
             <Text style={[commonStyles.footerText, { color: "#333" }]}>
               Already have an account?{" "}
             </Text>
-            <Link href="/login">
+            <Link href="/screens/login">
               <Text style={[commonStyles.footerLink, { color: "#000" }]}>
                 Sign In
               </Text>

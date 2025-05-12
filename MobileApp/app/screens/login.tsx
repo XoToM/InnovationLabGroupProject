@@ -70,7 +70,7 @@ export default function LoginScreen() {
     try {
       const { error } = await signIn(email, password);
       if (error) Alert.alert("Login Failed", error);
-      else router.replace("/map");
+      else router.replace("/screens/map");
     } catch (err) {
       Alert.alert("Error", "Unexpected error during login.");
       console.error(err);
@@ -254,7 +254,7 @@ export default function LoginScreen() {
             <Text style={[commonStyles.footerText, { color: "#333" }]}>
               Don't have an account?{" "}
             </Text>
-            <Link href="/signup">
+            <Link href="/screens/signup">
               <Text style={[commonStyles.footerLink, { color: "#000" }]}>
                 Sign Up
               </Text>
