@@ -1,17 +1,21 @@
-import React, { useState } from 'react';
-import {
- StyleSheet, Image, TouchableOpacity, ScrollView
-} from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { P, H1, H2, H3 } from '@/components/text';
+import { H1, H2, H3, P } from '@/components/text';
 import { BackgroundView, CardView } from '@/components/views';
+import { Ionicons } from '@expo/vector-icons';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import React, { useState } from 'react';
+
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity
+} from 'react-native';
 const router = useRouter();
 export default function App() {
   const [activeInfo, setActiveInfo] = useState(null);
   const [hoursOpen, setHoursOpen] = useState(false);
-  const { name, formattedAddress, photo, wheelchairAccessibleParking, wheelchairAccessibleEntrance, wheelchairAccessibleRestroom, wheelchairAccessDescription, inductionLoop, inductionLoopDescription, description, rating, priceLevel, nationalPhoneNumber, latitude, longitude, regularOpeningHours, delivery, takeout, dineIn, outdoorSeating, liveMusic, allowsDogs, goodForChildren, goodForGroups, goodForWatchingSports, restroom, reservable, curbsidePickup, menuForChildren, acceptsCreditCards, acceptsDebitCards, acceptsCashOnly, acceptsNfc } = useLocalSearchParams(); //add additional parameters
+  const { idPlace, name, formattedAddress, photo, wheelchairAccessibleParking, wheelchairAccessibleEntrance, wheelchairAccessibleRestroom, wheelchairAccessDescription, inductionLoop, inductionLoopDescription, description, rating, priceLevel, nationalPhoneNumber, latitude, longitude, regularOpeningHours, delivery, takeout, dineIn, outdoorSeating, liveMusic, allowsDogs, goodForChildren, goodForGroups, goodForWatchingSports, restroom, reservable, curbsidePickup, menuForChildren, acceptsCreditCards, acceptsDebitCards, acceptsCashOnly, acceptsNfc } = useLocalSearchParams(); //add additional parameters
+
 
   const toggleInfo = (type: any) => {
     setActiveInfo(activeInfo === type ? null : type);
@@ -40,7 +44,7 @@ export default function App() {
     <BackgroundView style={styles.container}>
       {/* Header */}
       <CardView style={styles.header}>
-        <TouchableOpacity onPress={() => router.push('./map')}>
+        <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="menu" size={36} />
         </TouchableOpacity>
 

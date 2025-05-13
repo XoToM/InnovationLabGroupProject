@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { FlatList, Modal, ScrollView, Image, View, TouchableOpacity } from 'react-native';
-import { Link, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRouter } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Image, Modal, ScrollView, TouchableOpacity, View } from 'react-native';
 
-import { BackgroundView, CardView } from '@/components/views';
 import { TextBtn, Toggle } from '@/components/interactive';
-import { Title, H2, P } from '@/components/text';
+import { H2, P, Title } from '@/components/text';
+import { BackgroundView, CardView } from '@/components/views';
 
 const router = useRouter()
 const USER_LOCATION = {
@@ -234,7 +234,7 @@ export default function PlacesScreen() {
     <BackgroundView>
       <CardView style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 }}>
         
-        <TouchableOpacity style={{margin: 10}} onPress={() => router.push('/screens/map')}>
+        <TouchableOpacity style={{margin: 10}} onPress={() => router.back()}>
           <Ionicons name="home" size={28} />
         </TouchableOpacity>
     

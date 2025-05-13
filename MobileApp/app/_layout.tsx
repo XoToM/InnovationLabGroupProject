@@ -1,8 +1,8 @@
-import { SplashScreen, Stack } from 'expo-router';
-import { ThemeProvider } from "../context/ThemeContext";
-import { useEffect } from 'react';
-import { useFonts } from 'expo-font';
 import { AuthProvider } from '@/constants/auth-context';
+import { ThemeProvider } from "@/context/ThemeContext";
+import { useFonts } from 'expo-font';
+import { SplashScreen, Stack } from 'expo-router';
+import { useEffect } from 'react';
 
 SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
@@ -21,7 +21,7 @@ export default function RootLayout() {
 		<ThemeProvider>
 			<AuthProvider>
 				<Stack>
-					<Stack.Screen name="index" options={{ title: "Home" }} />
+					<Stack.Screen name="map" options={{ title: "Home" }} />
 				</Stack>
 			</AuthProvider>
 		</ThemeProvider>

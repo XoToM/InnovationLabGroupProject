@@ -1,15 +1,17 @@
 
-import { Link, useRouter } from 'expo-router';
-import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, Button,Image, StyleSheet,FlatList, Platform, Pressable, TouchableOpacity, DimensionValue, useAnimatedValue, Animated, Easing } from 'react-native';
-import Mapbox, {Camera, LocationPuck, MapView,MarkerView,PointAnnotation,StyleURL} from "@rnmapbox/maps";
+import { Entypo } from '@expo/vector-icons';
+import Mapbox, { Camera, LocationPuck, MapView, PointAnnotation } from "@rnmapbox/maps";
 import Constants from 'expo-constants';
-import { Entypo, Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { Animated, DimensionValue, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import * as Location from "expo-location";
-import { H1, H2, H3, P } from '@/components/text';
-import { BackgroundView, CardView } from '@/components/views';
+import { H1, H2 } from '@/components/text';
+import { CardView } from '@/components/views';
 import { useTheme } from '@/context/ThemeContext';
+import * as Location from "expo-location";
+import AntDesign from '@expo/vector-icons/AntDesign';
+
 Location.requestForegroundPermissionsAsync();
 
 if(Constants.expoConfig?.extra?.MAPBOX_ACCESS_TOKEN){
@@ -93,7 +95,6 @@ export default function ScreenMap() {
 		<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 			{Constants.expoConfig?.extra?.MAPBOX_ACCESS_TOKEN?(
 				<MapView style={StyleSheet.absoluteFillObject} compassEnabled={true}>
-					
 					<Camera defaultSettings={{ centerCoordinate: [-2.3643467114359953, 51.378860189408165], zoomLevel: 13 }}/>
 					{
 						locations.map((loc:any,i:number)=>{

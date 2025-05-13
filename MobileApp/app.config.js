@@ -1,13 +1,13 @@
-import 'dotenv/config'
+import 'dotenv/config';
 
 module.exports = {
   "expo": {
-    "name": "MobileApp",
-    "slug": "MobileApp",
+    "name": "EquiMap",
+    "slug": "EquiMap",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "EquiMap",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -18,7 +18,8 @@ module.exports = {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.MobileApp"
+      "package": "com.anonymous.EquiMap",
+      "edgeToEdgeEnabled": true
     },
     "web": {
       "bundler": "metro",
@@ -27,7 +28,6 @@ module.exports = {
     },
     "plugins": [
       "expo-router",
-      "expo-location",
       [
         "expo-splash-screen",
         {
@@ -49,7 +49,7 @@ module.exports = {
       "typedRoutes": true
     },
     "extra":{
-      "MAPBOX_ACCESS_TOKEN":process.env.MAPBOX_ACCESS_TOKEN 
+      "MAPBOX_ACCESS_TOKEN":process.env.MAPBOX_ACCESS_TOKEN
     }
   }
 };
