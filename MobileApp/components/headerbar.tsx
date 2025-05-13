@@ -18,7 +18,7 @@ export function HeaderBar({ navigation, route, options, back }:any){
 			title = route.params.name;
 			break;
 			default:
-				title = route.name;
+				title = options.title||route.name;
 				break;
 	}
 	console.log("Route changed: ",route);

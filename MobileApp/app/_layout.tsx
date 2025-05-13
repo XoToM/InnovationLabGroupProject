@@ -26,7 +26,7 @@ export default function RootLayout() {
 					<Stack.Screen name="index" options={{headerShown:false }} />
 					<Stack.Screen name="map" options={{ title: "Home" }} />
 					<Stack.Screen name="screens/settings" options={{ title: "Settings" }} />
-					<Stack.Screen name="screens/filter-places" options={{ title: "Settings" }} />
+					<Stack.Screen name="screens/filter-places" options={{ title: "Places" }} />
 				</Stack>
 			</AuthProvider>
 		</ThemeProvider>
