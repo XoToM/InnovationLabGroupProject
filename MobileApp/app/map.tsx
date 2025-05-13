@@ -1,5 +1,6 @@
 
 import { Entypo } from '@expo/vector-icons';
+//	Causes warnings to appear. It looks like rnmapbox has quite a few bugs atm
 import Mapbox, { Camera, LocationPuck, MapView, PointAnnotation } from "@rnmapbox/maps";
 import Constants from 'expo-constants';
 import { useRouter } from 'expo-router';

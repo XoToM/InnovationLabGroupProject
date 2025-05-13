@@ -43,7 +43,7 @@ export default function App() {
   return (
     <BackgroundView style={styles.container}>
       {/* Header */}
-      <CardView style={styles.header}>
+      {/* <CardView style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="menu" size={36} />
         </TouchableOpacity>
@@ -55,10 +55,12 @@ export default function App() {
           <Ionicons name="settings" size={36} />
         </TouchableOpacity>
       </CardView>
-      <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent}> {/*you need scroll view to scroll but then you need background to make it look good. thats why its nested like this freaky deaky ass shit*/}
         
-
-
+      </CardView>
+      <ScrollView style={styles.scrollContainer}> 
+        <BackgroundView style={styles.container}>
+        */}
+      <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent}> {/*you need scroll view to scroll but then you need background to make it look good. thats why its nested like this freaky deaky ass shit*/}
 
 
 

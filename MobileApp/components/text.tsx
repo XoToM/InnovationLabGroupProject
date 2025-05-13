@@ -1,10 +1,11 @@
 import { Text } from "react-native";
 import { useTheme } from '../context/ThemeContext';
 import BaseTheme from "@/constants/themes/base";
+import React from "react";
 
-export function Title({children,style}:{children:string,style?:any}){
+export function Title({children,style,adjustsFontSizeToFit=false}:{children:string,style?:any,adjustsFontSizeToFit:boolean}){
 	const { theme } = useTheme();
-	return <Text style={[BaseTheme.title, { color: theme.text }, style]}>{children}</Text>;
+	return <Text style={[BaseTheme.title, { color: theme.text }, style]} adjustsFontSizeToFit={adjustsFontSizeToFit}>{children}</Text>;
 }
 
 export function H1({ children, style }: { children: string; style?: any }) {
