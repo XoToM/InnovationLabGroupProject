@@ -31,7 +31,7 @@ export function HeaderBar({ navigation, route, options, back }:any){
 						onPress={()=>{router.back()}}
 						accessible={true}
 						accessibilityLabel="Back"
-						style={{borderRightWidth:1,borderColor:"#66000000",marginHorizontal:10}}
+						style={{marginHorizontal:10}}
 						>
 						<Ionicons name="arrow-back" size={50} color={theme.text} />
 					</TouchableOpacity>
@@ -40,20 +40,20 @@ export function HeaderBar({ navigation, route, options, back }:any){
 						onPress={()=>{router.push("/screens/filter-places")}}
 						accessible={true}
 						accessibilityLabel="Search"
-						style={{borderRightWidth:1,borderColor:"#000000",marginHorizontal:10}}
+						style={{borderColor:"#000000",marginHorizontal:10}}
 						>
 						<FontAwesome name="search" size={48} color={theme.text} />
 					</TouchableOpacity>
 
 				}
 				<View style={{flexShrink:1,width:"100%",marginHorizontal:10}}>
-					<Title adjustsFontSizeToFit={true}>{title}</Title>
+					<Title adjustsFontSizeToFit={true} style={{textAlign:"center", textAlignVertical:"center"}}>{title}</Title>
 				</View>
 				<TouchableOpacity
 					onPress={()=>{router.push("/screens/settings")}}
 					accessible={true}
 					accessibilityLabel="Settings"
-					style={{borderLeftWidth:1,borderColor:"black",marginHorizontal:10}}>
+					style={{borderColor:"black",marginHorizontal:10}}>
 						<FontAwesome name="gear" size={50} color={theme.text} />
 				</TouchableOpacity>
 			</CardView></SafeAreaView>;

@@ -1,7 +1,7 @@
 
 import { Entypo } from '@expo/vector-icons';
 //	Causes warnings to appear. It looks like rnmapbox has quite a few bugs atm
-import Mapbox, { Camera, LocationPuck, MapView, PointAnnotation } from "@rnmapbox/maps";
+import Mapbox, { Camera, LocationPuck, MapView, MarkerView, PointAnnotation } from "@rnmapbox/maps";
 import Constants from 'expo-constants';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
@@ -53,6 +53,7 @@ export default function ScreenMap() {
 	let featuredPos:DimensionValue = showFeatured?0:"-60%";
 
 	useEffect(()=>{
+		console.log(Mapbox.StyleURL.Street);
 		if(showFeatured.valueOf()){
 			animated_pos.setValue(0);
 			Animated.timing(animated_pos, {
@@ -69,6 +70,7 @@ export default function ScreenMap() {
 	},[showFeatured, animated_pos]);
 
 	let [locations, setLocations]:[any,any] = useState([]);
+	let locationsInfo = locations.slice(0,5);
 
 	function shuffle(arr:any[]){
 		for (let i=0;i<arr.length;i++){
@@ -84,7 +86,7 @@ export default function ScreenMap() {
 		fetch("https://katestudent.pythonanywhere.com:443/places").then(async (response)=>{
 			if (response.ok){
 				let data = await response.json();
-				let places = shuffle(data.places).slice(0,5);
+				let places = shuffle(data.places);
 				setLocations(places);
 			}else{
 				console.warn(`Failed to fetch recommended locations: ${await response.text()}`);
@@ -95,16 +97,16 @@ export default function ScreenMap() {
 	return (
 		<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 			{Constants.expoConfig?.extra?.MAPBOX_ACCESS_TOKEN?(
-				<MapView style={StyleSheet.absoluteFillObject} compassEnabled={true}>
+				<MapView style={StyleSheet.absoluteFillObject} styleURL='mapbox://styles/qbit1103/cm8zw2f22005l01sd70eu9cve' compassEnabled={true}>
 					<Camera defaultSettings={{ centerCoordinate: [-2.3643467114359953, 51.378860189408165], zoomLevel: 13 }}/>
 					{
 						locations.map((loc:any,i:number)=>{
-							return	<PointAnnotation key={i+">"+loc.name} id={""+i} coordinate={[loc.longitude, loc.latitude]} anchor={{x:0.5,y:1}} onSelected={()=>
-								router.push({
-									pathname: '/screens/place',
-									params: loc})
-							}>
-										<Entypo name="location-pin" size={64} color="orange" />
+							return	<PointAnnotation key={i + ">" + loc.name} id={"" + i} coordinate={[loc.longitude, loc.latitude]} anchor={{ x: 0.5, y: 1 }} onSelected={
+								() => router.push({
+								pathname: '/screens/place',
+								params: loc
+							})}>
+								<Entypo name="location-pin" size={48} color="red" />
 								</PointAnnotation>;
 						})
 					}
@@ -115,7 +117,7 @@ export default function ScreenMap() {
 				<TouchableOpacity onPress={()=>{setShowFeatured(!showFeatured);}}>
 					<H1 style={{marginBottom:20}}>Featured</H1>
 				</TouchableOpacity>
-				<FlatList style={{padding:10}} contentContainerStyle={{gap:10}} scrollEnabled={true}  horizontal={false} data={locations} renderItem={(i)=><LocationPreview info={i.item}/>} ItemSeparatorComponent={() => <View style={{height:1,width: 10}} />}/>
+				<FlatList style={{padding:10}} contentContainerStyle={{gap:10}} scrollEnabled={true} horizontal={false} data={locationsInfo} renderItem={(i)=><LocationPreview info={i.item}/>} ItemSeparatorComponent={() => <View style={{height:1,width: 10}} />}/>
 			</Animated.View>
 		</View>
 	);

@@ -64,7 +64,7 @@ const SettingsScreen = () => {
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <TouchableOpacity style={styles.settingIcon} onPress={() => router.back()}>
           <Ionicons name="home" size={28} color={theme.text} />
         </TouchableOpacity>
@@ -72,7 +72,7 @@ const SettingsScreen = () => {
         <TouchableOpacity style={styles.settingIcon} onPress={() => router.push('/screens/filter-places')}>
           <Ionicons name="close" size={28} color={theme.text} />
         </TouchableOpacity>
-      </View>
+      </View> */}
 
       {/* Accessibility Options */}
       <View style={styles.section}>

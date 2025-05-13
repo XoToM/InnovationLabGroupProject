@@ -232,7 +232,7 @@ export default function PlacesScreen() {
 
   return (
     <BackgroundView>
-      <CardView style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 }}>
+      {/* <CardView style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 }}>
         
         <TouchableOpacity style={{margin: 10}} onPress={() => router.back()}>
           <Ionicons name="home" size={28} />
@@ -247,7 +247,7 @@ export default function PlacesScreen() {
         <Ionicons name="settings" size={28}/>
       </TouchableOpacity>
 
-    </CardView>
+    </CardView> */}
 
       <Modal
         transparent={true}
