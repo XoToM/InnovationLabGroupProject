@@ -239,15 +239,16 @@ export default function PlacesScreen() {
         </TouchableOpacity>
     
 
-      <TextBtn onClick={toggleModal} style={{ paddingHorizontal: 24 }}>
-        Filters
-      </TextBtn>
+      
 
       <TouchableOpacity style={{margin: 10}} onPress={() => router.push('/screens/settings')}>
         <Ionicons name="settings" size={28}/>
       </TouchableOpacity>
 
     </CardView> */}
+      <TextBtn onClick={toggleModal} style={{ paddingHorizontal: 15 }}>
+        Filters
+      </TextBtn>
 
       <Modal
         transparent={true}
