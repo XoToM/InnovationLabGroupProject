@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useLayoutEffect } from "react";
 import { router } from "expo-router";
 import {
   View,
@@ -14,10 +14,10 @@ import {
 import { Input, Button } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { colors, commonStyles } from "@/common/common";
+import { colors, commonStyles } from "../common/common";
 import { Feather, AntDesign } from "@expo/vector-icons";
 import { Link } from "expo-router";
-import { useAuth } from "@/constants/auth-context";
+import { useAuth } from "../context/context";
 
 type RootStackParamList = {
   Login: undefined;
@@ -40,7 +40,7 @@ export default function LoginScreen() {
   const navigation = useNavigation<LoginScreenNavigationProp>();
   const { signIn } = useAuth();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     navigation.setOptions({ headerShown: false });
   }, [navigation]);
 
@@ -209,52 +209,11 @@ export default function LoginScreen() {
             disabledStyle={{ backgroundColor: "#ffcc00aa" }}
           />
 
-          <View style={commonStyles.dividerContainer}>
-            <View style={commonStyles.divider} />
-            <Text style={[commonStyles.dividerText, { color: "#333" }]}>
-              OR
-            </Text>
-            <View style={commonStyles.divider} />
-          </View>
-
-          <View style={commonStyles.socialButtonsContainer}>
-            <Button
-              title="Continue with Google"
-              icon={
-                <View style={commonStyles.iconContainer}>
-                  <AntDesign name="google" size={22} color="#000" />
-                </View>
-              }
-              buttonStyle={{
-                backgroundColor: "#ffcc00",
-                borderRadius: 12,
-                height: 56,
-                marginTop: 12,
-              }}
-              titleStyle={{ color: "#000", fontWeight: "500", fontSize: 15 }}
-            />
-            <Button
-              title="Continue with Apple"
-              icon={
-                <View style={commonStyles.iconContainer}>
-                  <AntDesign name="apple1" size={22} color="black" />
-                </View>
-              }
-              buttonStyle={{
-                backgroundColor: "#ffcc00",
-                borderRadius: 12,
-                height: 56,
-                marginTop: 12,
-              }}
-              titleStyle={{ color: "#000", fontWeight: "500", fontSize: 15 }}
-            />
-          </View>
-
           <View style={commonStyles.footerContainer}>
             <Text style={[commonStyles.footerText, { color: "#333" }]}>
               Don't have an account?{" "}
             </Text>
-            <Link href="/screens/signup">
+            <Link href="/signup">
               <Text style={[commonStyles.footerLink, { color: "#000" }]}>
                 Sign Up
               </Text>

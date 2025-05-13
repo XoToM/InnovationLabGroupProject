@@ -12,8 +12,8 @@ import {
   Alert,
 } from "react-native";
 import { Input, Button } from "@rneui/themed";
-import { useAuth } from "@/context/context";
-import { colors, commonStyles } from "@/common/common";
+import { useAuth } from "../context/context";
+import { colors, commonStyles } from "../common/common";
 import { Feather, AntDesign } from "@expo/vector-icons";
 import { Link } from "expo-router";
 
@@ -86,7 +86,7 @@ export default function SignupScreen() {
         Alert.alert("Error", error);
       } else {
         Alert.alert("Success", "Account created successfully!");
-        router.replace("/screens/login");
+        router.replace("/login");
       }
     } catch (error) {
       Alert.alert("Error", "An unexpected error occurred");
@@ -269,44 +269,11 @@ export default function SignupScreen() {
             disabledStyle={{ backgroundColor: "#ffcc00aa" }}
           />
 
-          <View style={commonStyles.dividerContainer}>
-            <View style={commonStyles.divider} />
-            <Text style={[commonStyles.dividerText, { color: "#333" }]}>
-              OR
-            </Text>
-            <View style={commonStyles.divider} />
-          </View>
-
-          <View style={commonStyles.socialButtonsContainer}>
-            <Button
-              title="Sign up with Google"
-              icon={<AntDesign name="google" size={22} color="#000" />}
-              buttonStyle={{
-                backgroundColor: "#ffcc00",
-                borderRadius: 12,
-                height: 56,
-                marginTop: 12,
-              }}
-              titleStyle={{ color: "#000", fontWeight: "500", fontSize: 15 }}
-            />
-            <Button
-              title="Sign up with Apple"
-              icon={<AntDesign name="apple1" size={22} color="black" />}
-              buttonStyle={{
-                backgroundColor: "#ffcc00",
-                borderRadius: 12,
-                height: 56,
-                marginTop: 12,
-              }}
-              titleStyle={{ color: "#000", fontWeight: "500", fontSize: 15 }}
-            />
-          </View>
-
           <View style={commonStyles.footerContainer}>
             <Text style={[commonStyles.footerText, { color: "#333" }]}>
               Already have an account?{" "}
             </Text>
-            <Link href="/screens/login">
+            <Link href="/login">
               <Text style={[commonStyles.footerLink, { color: "#000" }]}>
                 Sign In
               </Text>
