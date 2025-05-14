@@ -5,7 +5,7 @@ import React from "react";
 
 type TextStyles = TextStyle | TextStyles[];
 
-export function Title({children,style,adjustsFontSizeToFit=false}:{children:string,style?:TextStyles,adjustsFontSizeToFit:boolean}){
+export function Title({children,style,adjustsFontSizeToFit=false}:{children:string,style?:TextStyles,adjustsFontSizeToFit?:boolean}){
 	const { theme } = useTheme();
 	return <Text style={[BaseTheme.title, { color: theme.text }, style]} adjustsFontSizeToFit={adjustsFontSizeToFit}>{children}</Text>;
 }

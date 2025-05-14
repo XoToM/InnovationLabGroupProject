@@ -93,11 +93,11 @@ export default function ScreenMap() {
 			}
 		});
 	},[]);
-	
+	//styleURL='mapbox://styles/qbit1103/cm8zw2f22005l01sd70eu9cve'
 	return (
 		<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 			{Constants.expoConfig?.extra?.MAPBOX_ACCESS_TOKEN?(
-				<MapView style={StyleSheet.absoluteFillObject} styleURL='mapbox://styles/qbit1103/cm8zw2f22005l01sd70eu9cve' compassEnabled={true}>
+				<MapView style={StyleSheet.absoluteFillObject} compassEnabled={true}>
 					<Camera defaultSettings={{ centerCoordinate: [-2.3643467114359953, 51.378860189408165], zoomLevel: 13 }}/>
 					{
 						locations.map((loc:any,i:number)=>{
@@ -106,7 +106,7 @@ export default function ScreenMap() {
 								pathname: '/screens/place',
 								params: loc
 							})}>
-								<Entypo name="location-pin" size={48} color="red" />
+								<Entypo name="location-pin" size={48} color="green" />
 								</PointAnnotation>;
 						})
 					}
