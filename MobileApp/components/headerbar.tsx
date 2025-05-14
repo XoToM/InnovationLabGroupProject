@@ -21,7 +21,6 @@ export function HeaderBar({ navigation, route, options, back }:any){
 				title = options.title||route.name;
 				break;
 	}
-	console.log("Route changed: ",route);
 	
 	return <SafeAreaView edges={["top","left","right"]} style={{height:110}}>
 			<CardView style={{flex:1,flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"100%",borderRadius:0}}>
