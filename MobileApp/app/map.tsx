@@ -4,7 +4,7 @@ import { Entypo } from '@expo/vector-icons';
 import Mapbox, { Camera, LocationPuck, MapView, MarkerView, PointAnnotation } from "@rnmapbox/maps";
 import Constants from 'expo-constants';
 import { useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Animated, DimensionValue, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { H1, H2 } from '@/components/text';
@@ -12,6 +12,7 @@ import { CardView } from '@/components/views';
 import { useTheme } from '@/context/ThemeContext';
 import * as Location from "expo-location";
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 Location.requestForegroundPermissionsAsync();
 
@@ -46,22 +47,28 @@ function LocationPreview({info}:any){
 export default function ScreenMap() {
 	const router = useRouter();
 	const { theme } = useTheme();
+	const [prevShowMenu,setPrevShowMenu] = useState(true);
 	let animated_pos = new Animated.Value(-600);
 
 
-	let [showFeatured, setShowFeatured] = useState(false);
+	let [showFeatured, setShowFeatured] = useState(true);
+	let safeAreaPadding = useSafeAreaInsets();
 	let featuredPos:DimensionValue = showFeatured?0:"-60%";
 
 	useEffect(()=>{
+		if(prevShowMenu.valueOf()){
+			setPrevShowMenu(false);
+			return;
+		}
 		console.log(Mapbox.StyleURL.Street);
 		if(showFeatured.valueOf()){
 			animated_pos.setValue(0);
 			Animated.timing(animated_pos, {
 				useNativeDriver: false,
-				toValue: -600
+				toValue: -600+safeAreaPadding.bottom
 			}).start();
-		}else{
-			animated_pos.setValue(-600);
+		}else {
+			animated_pos.setValue(-600+safeAreaPadding.bottom);
 			Animated.timing(animated_pos, {
 				useNativeDriver: false,
 				toValue: 0
@@ -115,7 +122,12 @@ export default function ScreenMap() {
 			}
 			<Animated.View style={{padding:10,position:"absolute",width:"100%", maxHeight:"90%", bottom:animated_pos, backgroundColor:theme.background}}>
 				<TouchableOpacity onPress={()=>{setShowFeatured(!showFeatured);}}>
-					<H1 style={{marginBottom:20}}>Featured</H1>
+					<View style={{flex:1, flexDirection:'row', justifyContent:"space-between",paddingHorizontal:10}}>
+						<H1 style={{marginBottom:20}}>Featured</H1>
+						{
+							showFeatured?<AntDesign name="down" size={48} color="black" />:<AntDesign name="up" size={48} color="black" />
+						}
+						</View>
 				</TouchableOpacity>
 				<FlatList style={{padding:10}} contentContainerStyle={{gap:10}} scrollEnabled={true} horizontal={false} data={locationsInfo} renderItem={(i)=><LocationPreview info={i.item}/>} ItemSeparatorComponent={() => <View style={{height:1,width: 10}} />}/>
 			</Animated.View>

@@ -21,6 +21,7 @@ export function HeaderBar({ navigation, route, options, back }:any){
 				title = options.title||route.name;
 				break;
 	}
+	console.log(route.name);
 	
 	return <SafeAreaView edges={["top","left","right"]} style={{height:110}}>
 			<CardView style={{flex:1,flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"100%",borderRadius:0}}>
@@ -38,22 +39,23 @@ export function HeaderBar({ navigation, route, options, back }:any){
 					<TouchableOpacity
 						onPress={()=>{router.push("/screens/filter-places")}}
 						accessible={true}
-						accessibilityLabel="Search"
+						accessibilityLabel="Filter"
 						style={{borderColor:"#000000",marginHorizontal:10}}
 						>
-						<FontAwesome name="search" size={48} color={theme.text} />
+						<FontAwesome name="filter" size={50} color="black" />
 					</TouchableOpacity>
 
 				}
 				<View style={{flexShrink:1,width:"100%",marginHorizontal:10}}>
 					<Title adjustsFontSizeToFit={true} style={{textAlign:"center", textAlignVertical:"center"}}>{title}</Title>
 				</View>
-				<TouchableOpacity
+
+				{(route.name!=="screens/settings")&&(<TouchableOpacity
 					onPress={()=>{router.push("/screens/settings")}}
 					accessible={true}
 					accessibilityLabel="Settings"
 					style={{borderColor:"black",marginHorizontal:10}}>
 						<FontAwesome name="gear" size={50} color={theme.text} />
-				</TouchableOpacity>
+				</TouchableOpacity>)}
 			</CardView></SafeAreaView>;
 }
