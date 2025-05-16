@@ -1,7 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useTheme } from '../context/ThemeContext';
+import { useTheme } from '@/context/ThemeContext';
 import { TouchableOpacity, View,Text, Switch } from "react-native";
 import BaseTheme from "@/constants/themes/base";
+import React from "react";
 
 
 

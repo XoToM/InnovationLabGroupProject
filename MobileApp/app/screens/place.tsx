@@ -1,17 +1,25 @@
-import React, { useState } from 'react';
-import {
- StyleSheet, Image, TouchableOpacity, ScrollView
-} from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { P, H1, H2, H3 } from '@/components/text';
+import { H1, H2, H3, P } from '@/components/text';
 import { BackgroundView, CardView } from '@/components/views';
-const router = useRouter();
+import { FontAwesome5, Ionicons } from '@expo/vector-icons';
+import { useTheme } from '@react-navigation/native';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import React, { useState } from 'react';
+
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View
+} from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 export default function App() {
+  const theme = useTheme();
+  const safeAreaPadding = useSafeAreaInsets();
   const [activeInfo, setActiveInfo] = useState(null);
   const [hoursOpen, setHoursOpen] = useState(false);
-  const { name, formattedAddress, photo, wheelchairAccessibleParking, wheelchairAccessibleEntrance, wheelchairAccessibleRestroom, wheelchairAccessDescription, inductionLoop, inductionLoopDescription, description, rating, priceLevel, nationalPhoneNumber, latitude, longitude, regularOpeningHours, delivery, takeout, dineIn, outdoorSeating, liveMusic, allowsDogs, goodForChildren, goodForGroups, goodForWatchingSports, restroom, reservable, curbsidePickup, menuForChildren, acceptsCreditCards, acceptsDebitCards, acceptsCashOnly, acceptsNfc } = useLocalSearchParams(); //add additional parameters
+  const { idPlace, name, formattedAddress, photo, wheelchairAccessibleParking, wheelchairAccessibleEntrance, wheelchairAccessibleRestroom, wheelchairAccessDescription, inductionLoop, inductionLoopDescription, description, rating, priceLevel, nationalPhoneNumber, latitude, longitude, regularOpeningHours, delivery, takeout, dineIn, outdoorSeating, liveMusic, allowsDogs, goodForChildren, goodForGroups, goodForWatchingSports, restroom, reservable, curbsidePickup, menuForChildren, acceptsCreditCards, acceptsDebitCards, acceptsCashOnly, acceptsNfc } = useLocalSearchParams(); //add additional parameters
+
 
   const toggleInfo = (type: any) => {
     setActiveInfo(activeInfo === type ? null : type);
@@ -37,53 +45,37 @@ export default function App() {
   };
 
   return (
+        // <SafeAreaView edges={["bottom"]}>
     <BackgroundView style={styles.container}>
-      {/* Header */}
-      <CardView style={styles.header}>
-        <TouchableOpacity onPress={() => router.push('./map')}>
-          <Ionicons name="menu" size={36} />
-        </TouchableOpacity>
-
-        <H1 style={{ flexShrink: 1, flexGrow: 1, textAlign: 'center', }}>{String(name)}</H1>
-
-
-        <TouchableOpacity onPress={() => router.push('./settings')}>
-          <Ionicons name="settings" size={36} />
-        </TouchableOpacity>
-      </CardView>
-      <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent}> {/*you need scroll view to scroll but then you need background to make it look good. thats why its nested like this freaky deaky ass shit*/}
-        
-
-
-
-
+      <ScrollView style={styles.scrollContainer} contentContainerStyle={[styles.scrollContent,{paddingBottom:safeAreaPadding.bottom+10}]}> {/*you need scroll view to scroll but then you need background to make it look good. thats why its nested like this freaky deaky ass shit*/}
 
           {photo ? (
             <Image source={{ uri: String(photo) }} style={[styles.largeImage, { resizeMode: "stretch" }]} />
           ) : (
             <P>No image available</P>
           )}
+          <View style={{width:"90%", flex:1,flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
 
-          <CardView style={styles.buttonContainer}>
+          <View style={[styles.buttonContainer,{marginBottom:0}]}>
             {[
-              { type: 'accessibility', label: ' ♿ ' },
-              { type: 'familyPets', label: ' 🐶 ' },
-              { type: 'services', label: ' 🍽️ ' },
-              { type: 'payment', label: ' 💳 ' },
-            ].map(({ type, label }) => (
+              { type: 'accessibility', label: ' ♿ ', accessibleLabel:"Movement Accessibility" },
+              { type: 'familyPets', label: ' 🐶 ', accessibleLabel:"Suitability" },
+              { type: 'services', label: ' 🍽️ ', accessibleLabel:"Available Services" },
+              { type: 'payment', label: ' 💳 ', accessibleLabel:"Payment Methods" },
+            ].map(({ type, label,accessibleLabel }) => (
 
-              <CardView key={type} style={styles.buttonWrapper}>
+              <CardView key={type} style={[styles.buttonWrapper,(activeInfo===type)?{paddingBottom:0, borderBottomWidth:0}:{}]}>
                 <TouchableOpacity style={styles.iconButton} onPress={() => toggleInfo(type)}>
-                  <P style={styles.iconText}>{String(label)}</P>
+                  <P style={styles.iconText} accessibleLabel={accessibleLabel}>{String(label)}</P>
                 </TouchableOpacity>
                 {activeInfo === type && <P>▲</P>}
               </CardView>
             ))}
-          </CardView>
+          </View>
 
 
-          {activeInfo && (
-            <CardView style={styles.noticeBox}>
+          
+          {activeInfo&&(<CardView style={[styles.noticeBox,{maxHeight:activeInfo?"auto":0}]}>
               {activeInfo === 'accessibility' && (
                 <>
                   <P>
@@ -168,8 +160,9 @@ export default function App() {
                 </>
               )}
 
-            </CardView>
-          )}
+          </CardView>)}
+
+          </View>
 
           <CardView style={styles.ratingContainer}>
             <P style={styles.stars}>{renderStars(rating)}</P>
@@ -184,21 +177,20 @@ export default function App() {
           )}
 
           {formattedAddress && (
-            <CardView style={styles.ratingContainer}>
-              <H2>{String(formattedAddress)}</H2>
+            <CardView style={[styles.ratingContainer,{alignItems:"center"}]}>
+              <FontAwesome5 name="building" size={20} color="black" style={styles.labelIcons} /><H3>{String(formattedAddress)}</H3>
             </CardView>
           )}
-
           {nationalPhoneNumber && (
-            <CardView style={styles.ratingContainer}>
-              <H2>{String(nationalPhoneNumber)}</H2>
+            <CardView style={[styles.ratingContainer,{alignItems:"baseline"}]}>
+              <FontAwesome5 name="phone-alt" size={20} color="black" style={styles.labelIcons} /><H3>{String(nationalPhoneNumber)}</H3>
             </CardView>
           )}
 
         {regularOpeningHours && (
           <CardView style={styles.hoursBox}>
             <TouchableOpacity onPress={() => setHoursOpen(!hoursOpen)} style={styles.dropdownButton}>
-              <P>{hoursOpen ? '▼ Hide Opening Hours ▼' : '▲ Show Opening Hours ▲'}</P>
+              <H3 style={{textAlign:"center"}}>{hoursOpen ? '▲ Hide Opening Hours ▲' : '▼ Show Opening Hours ▼'}</H3>
             </TouchableOpacity>
 
             {hoursOpen &&
@@ -211,10 +203,9 @@ export default function App() {
                 ))}
           </CardView>
         )}
-        
       </ScrollView>
     </BackgroundView>
-
+    // </SafeAreaView>
   );
 
 }
@@ -223,51 +214,36 @@ const styles = StyleSheet.create({
 
   scrollContainer: {
     flex: 1,
+    flexDirection:"column",
     width: '100%',
+    height: "100%",
+    gap:20,
   },
   
   scrollContent: {
-    paddingBottom: 20,
+    paddingVertical: 20,
     alignItems: 'center',
     width: '100%',
+    gap:10
   },
   container: {
     flex: 1,
     //backgroundColor: '#f5f5a3',
     alignItems: 'center',
   },
-  header: {
-    flexDirection: 'row',
-    //backgroundColor: '#8BC34A',
-    flexWrap: 'wrap',
-    width: '100%',
-    padding: 15,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  headerText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  pageTitle: {
-    //backgroundColor: '#c5da8c',
-    width: '100%',
-    textAlign: 'center',
-    fontSize: 24,
-    fontWeight: 'bold',
-    padding: 10,
-  },
   largeImage: {
     width: '90%',
     height: 200,
-    marginVertical: 10,
     borderRadius: 10,
+    marginBottom:10
+  },
+  labelIcons:{
+    margin:5
   },
   buttonContainer: {
     flexDirection: 'row',
-    gap: 15,
-    marginBottom: 10,
+    gap: 10,
+    alignItems:"flex-start"
   },
   buttonWrapper: {
     alignItems: 'center',
@@ -289,9 +265,10 @@ const styles = StyleSheet.create({
     //backgroundColor: '#f4a261',
     padding: 10,
     borderRadius: 5,
-    width: '90%',
+    width: '100%',
+    // width: '90%',
     alignItems: 'center',
-    marginTop: 10,
+    shadowOffset: {height:15,width:0}
   },
   noticeText: {
     fontSize: 16,
@@ -302,21 +279,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '90%',
-    marginVertical: 10,
     alignItems: 'center',
   },
   contactText: {
     fontSize: 14,
     textAlign: 'left',
     width: '90%',
-    marginBottom: 4,
   },
 
   dropdownButton: {
     marginTop: 10,
-    marginBottom: 5,
+    marginBottom: 10,
     alignSelf: 'flex-start',
     paddingLeft: 20,
+    width:"100%"
   },
 
   dropdownText: {
@@ -330,8 +306,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 8,
-    marginBottom: 10,
     alignSelf: 'center',
+    textAlign:"center",
+    textAlignVertical:"center",
+    alignItems:"center",
+    justifyContent:"center"
     //backgroundColor: '#ddd',
   },
   stars: {

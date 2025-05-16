@@ -14,7 +14,7 @@ export function BackgroundView({ children, style }: BackgroundViewProps) {
 
 interface CardViewProps {
   children: React.ReactNode;
-  style?: ViewStyle;
+  style?: ViewStyle|ViewStyle[];
 }
 
 export function CardView({ children, style }: CardViewProps) {

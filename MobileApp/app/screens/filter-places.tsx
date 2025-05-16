@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { FlatList, Modal, ScrollView, Image, View, TouchableOpacity } from 'react-native';
-import { Link, useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRouter } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Image, Modal, ScrollView, TouchableOpacity, View } from 'react-native';
+import { useTheme } from '@/context/ThemeContext';
+import BaseTheme from "@/constants/themes/base";
 
-import { BackgroundView, CardView } from '@/components/views';
 import { TextBtn, Toggle } from '@/components/interactive';
-import { Title, H2, P } from '@/components/text';
+import { H2, P, Title } from '@/components/text';
+import { BackgroundView, CardView } from '@/components/views';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const router = useRouter()
 const USER_LOCATION = {
@@ -96,6 +99,7 @@ function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: numbe
 }
 
 export default function PlacesScreen() {
+  const theme = useTheme();
   const [places, setPlaces] = useState<Place[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -230,24 +234,26 @@ export default function PlacesScreen() {
     );
   }
 
+
   return (
     <BackgroundView>
-      <CardView style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 }}>
+      {/* <CardView style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 }}>
         
-        <TouchableOpacity style={{margin: 10}} onPress={() => router.push('/screens/map')}>
+        <TouchableOpacity style={{margin: 10}} onPress={() => router.back()}>
           <Ionicons name="home" size={28} />
         </TouchableOpacity>
     
 
-      <TextBtn onClick={toggleModal} style={{ paddingHorizontal: 24 }}>
-        Filters
-      </TextBtn>
+      
 
       <TouchableOpacity style={{margin: 10}} onPress={() => router.push('/screens/settings')}>
         <Ionicons name="settings" size={28}/>
       </TouchableOpacity>
 
-    </CardView>
+    </CardView> */}
+      <TextBtn onClick={toggleModal} style={{ paddingHorizontal: 15 }}>
+        Filters
+      </TextBtn>
 
       <Modal
         transparent={true}
@@ -257,15 +263,16 @@ export default function PlacesScreen() {
       >
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
           <CardView style={{ width: '80%', maxHeight: '70%', padding: 24 }}>
-            <TextBtn
-              onClick={toggleModal}
-              style={{ position: 'absolute', top: 10, right: 10, width: 30, height: 30, padding: 0 }}
-              textStyle={{ fontSize: 16, fontWeight: 'bold' }}
-            >
-              X
-            </TextBtn>
+            <View style={{flex:1,flexDirection:'row',justifyContent:"space-between"}}>
+              <Title style={{ marginBottom: 16 }}>Filters</Title>
+              <TouchableOpacity
+                onPress={toggleModal}
+                style={[BaseTheme.button,{ backgroundColor: theme.theme.primary,padding:5 }]}
+              >
+                <AntDesign name="close" size={48} color={theme.theme.text} />
+              </TouchableOpacity>
+            </View>
 
-            <Title style={{ marginBottom: 16 }}>Filters</Title>
 
             <ScrollView style={{ maxHeight: '80%' }}>
               {filterOptions.map(({ key, label }) => (

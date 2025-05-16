@@ -1,13 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Switch, StyleSheet,
-} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useTheme } from "../../context/ThemeContext";
 import { useRouter } from 'expo-router';
+import React, { useEffect, useState } from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  Switch,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { useTheme } from "../../context/ThemeContext";
 
 const router = useRouter();
-{/* коментар */}
 
 type AccessibilityOptions = {
   "Wheelchair user": boolean;
@@ -59,15 +64,15 @@ const SettingsScreen = () => {
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.settingIcon} onPress={() => router.push('/screens/map')}>
+      {/* <View style={styles.header}>
+        <TouchableOpacity style={styles.settingIcon} onPress={() => router.back()}>
           <Ionicons name="home" size={28} color={theme.text} />
         </TouchableOpacity>
         <Text style={[styles.headerText, { color: theme.text }]}>Settings</Text>
         <TouchableOpacity style={styles.settingIcon} onPress={() => router.push('/screens/filter-places')}>
           <Ionicons name="close" size={28} color={theme.text} />
         </TouchableOpacity>
-      </View>
+      </View> */}
 
       {/* Accessibility Options */}
       <View style={styles.section}>
@@ -77,8 +82,8 @@ const SettingsScreen = () => {
         <View style={[styles.optionsContainer, { backgroundColor: theme.card }]}>
           {Object.entries(accessibilityOptions).map(([key, value]) => (
             <View key={key} style={styles.optionRow}>
-              <Switch value={value} onValueChange={() => toggleOption(key as keyof AccessibilityOptions)} />
-              <Text style={[styles.sectionText, { color: theme.text }]}>{key}</Text>
+              <Switch value={value} onValueChange={() => toggleOption(key as keyof AccessibilityOptions)} accessibilityLabel={key} />
+              <Text style={[styles.sectionText, { color: theme.text }]} accessible={false}>{key}</Text>
             </View>
           ))}
         </View>
