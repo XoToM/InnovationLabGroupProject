@@ -82,8 +82,8 @@ const SettingsScreen = () => {
         <View style={[styles.optionsContainer, { backgroundColor: theme.card }]}>
           {Object.entries(accessibilityOptions).map(([key, value]) => (
             <View key={key} style={styles.optionRow}>
-              <Switch value={value} onValueChange={() => toggleOption(key as keyof AccessibilityOptions)} />
-              <Text style={[styles.sectionText, { color: theme.text }]}>{key}</Text>
+              <Switch value={value} onValueChange={() => toggleOption(key as keyof AccessibilityOptions)} accessibilityLabel={key} />
+              <Text style={[styles.sectionText, { color: theme.text }]} accessible={false}>{key}</Text>
             </View>
           ))}
         </View>

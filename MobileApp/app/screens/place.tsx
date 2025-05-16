@@ -58,15 +58,15 @@ export default function App() {
 
           <View style={[styles.buttonContainer,{marginBottom:0}]}>
             {[
-              { type: 'accessibility', label: ' ♿ ' },
-              { type: 'familyPets', label: ' 🐶 ' },
-              { type: 'services', label: ' 🍽️ ' },
-              { type: 'payment', label: ' 💳 ' },
-            ].map(({ type, label }) => (
+              { type: 'accessibility', label: ' ♿ ', accessibleLabel:"Movement Accessibility" },
+              { type: 'familyPets', label: ' 🐶 ', accessibleLabel:"Suitability" },
+              { type: 'services', label: ' 🍽️ ', accessibleLabel:"Available Services" },
+              { type: 'payment', label: ' 💳 ', accessibleLabel:"Payment Methods" },
+            ].map(({ type, label,accessibleLabel }) => (
 
               <CardView key={type} style={[styles.buttonWrapper,(activeInfo===type)?{paddingBottom:0, borderBottomWidth:0}:{}]}>
                 <TouchableOpacity style={styles.iconButton} onPress={() => toggleInfo(type)}>
-                  <P style={styles.iconText}>{String(label)}</P>
+                  <P style={styles.iconText} accessibleLabel={accessibleLabel}>{String(label)}</P>
                 </TouchableOpacity>
                 {activeInfo === type && <P>▲</P>}
               </CardView>

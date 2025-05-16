@@ -25,7 +25,7 @@ export function H3({ children, style }: { children: string; style?: TextStyles }
 	return <Text style={[BaseTheme.h3, { color: theme.text }, style]}>{children}</Text>;
 }
   
-export function P({ children, style }: { children: string; style?: TextStyles }) {
+export function P({ children, style,accessibleLabel }: { children: string; style?: TextStyles, accessibleLabel?:string }) {
 	const { theme } = useTheme();
-	return <Text style={[BaseTheme.p, { color: theme.text }, style]}>{children}</Text>;
+	return <Text style={[BaseTheme.p, { color: theme.text }, style]} accessible={(accessibleLabel===null)?false:true} accessibilityLabel={accessibleLabel?accessibleLabel:undefined}>{children}</Text>;
 }
