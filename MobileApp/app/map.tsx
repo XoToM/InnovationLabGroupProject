@@ -104,7 +104,7 @@ export default function ScreenMap() {
 	return (
 		<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 			{Constants.expoConfig?.extra?.MAPBOX_ACCESS_TOKEN?(
-				<MapView style={StyleSheet.absoluteFillObject} compassEnabled={true}>
+				<MapView style={StyleSheet.absoluteFillObject} compassEnabled={true} attributionPosition={{top: 32, left: 8}} logoPosition={{top: 32, left: 32}}>
 					<Camera defaultSettings={{ centerCoordinate: [-2.3643467114359953, 51.378860189408165], zoomLevel: 13 }}/>
 					{
 						locations.map((loc:any,i:number)=>{
@@ -121,6 +121,7 @@ export default function ScreenMap() {
 				</MapView>):<Text style={StyleSheet.absoluteFillObject}>No tokens provided</Text>
 			}
 			<Animated.View style={{padding:10,position:"absolute",width:"100%", maxHeight:"90%", bottom:animated_pos, backgroundColor:theme.background}}>
+				<TouchableOpacity style={{ padding: 15, borderRadius: 50, elevation: 3,position:"absolute",marginLeft:5,marginTop:-64,backgroundColor:theme.background}}><Entypo name="location" size={24} color="black" /></TouchableOpacity>
 				<TouchableOpacity onPress={()=>{setShowFeatured(!showFeatured);}}>
 					<View style={{flex:1, flexDirection:'row', justifyContent:"space-between",paddingHorizontal:10}}>
 						<H1 style={{marginBottom:20}}>Featured</H1>
